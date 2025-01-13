@@ -45,8 +45,10 @@ const server = () => {
     res.end();
   });
 
-  app.all("/fondyPay", async (req, res) => {
+  app.all("/statusPay", async (req, res) => {
     const response = await req.body;
+    console.log(response);
+
     // if (response.order_status === "approved") {
     //   await updateUserForPay(
     //     response.payment_id,

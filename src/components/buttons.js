@@ -13,13 +13,34 @@ const keyboardDefault = {
         {
           text: btnText.pay,
           callback_data: "buy_btn",
-          // web_app: {
-          //   url: `${paymentInfo.pay_link}`,
-          // },
         },
         {
           text: btnText.more,
           callback_data: "more",
+        },
+      ],
+    ],
+  },
+};
+
+const keyboardTariff = {
+  reply_markup: {
+    resize_keyboard: true,
+    inline_keyboard: [
+      [
+        {
+          text: btnText.month,
+          callback_data: "month",
+          // web_app: {
+          //   url: `${paymentInfoMonth.pay_link}`,
+          // },
+        },
+        {
+          text: btnText.threeMonth,
+          callback_data: "three_month",
+          // web_app: {
+          //   url: `${paymentInfoThreeMonth.pay_link}`,
+          // },
         },
       ],
     ],
@@ -35,17 +56,17 @@ const pay_btns = () => {
           [
             {
               text: btnText.month,
-              // callback_data: "buy_btn",
-              web_app: {
-                url: `${paymentInfoMonth.pay_link}`,
-              },
+              callback_data: "month",
+              // web_app: {
+              //   url: `${paymentInfoMonth.pay_link}`,
+              // },
             },
             {
               text: btnText.threeMonth,
-              // callback_data: "buy_btn",
-              web_app: {
-                url: `${paymentInfoThreeMonth.pay_link}`,
-              },
+              callback_data: "three_month",
+              // web_app: {
+              //   url: `${paymentInfoThreeMonth.pay_link}`,
+              // },
             },
           ],
         ],
@@ -66,6 +87,18 @@ const pay_btns = () => {
       },
     };
   }
+};
+
+const buyBtn = {
+  resize_keyboard: true,
+  inline_keyboard: [
+    [
+      {
+        text: btnText.pay,
+        callback_data: "buy_btn",
+      },
+    ],
+  ],
 };
 
 // const keyboardDefault = {
@@ -112,33 +145,91 @@ const subscription = {
   },
 };
 
-const pay_btn = () => {
+// const pay_btn_month = () => {
+//   if (paymentInfo.pay_link) {
+//     return {
+//       inline_keyboard: [
+//         [
+//           {
+//             text: btnText.month,
+//             web_app: {
+//               url: `${paymentInfo.pay_link}`,
+//             },
+//           },
+//         ],
+//         [{ text: btnText.back, callback_data: "back" }],
+//       ],
+//     };
+//   } else {
+//     return {
+//       inline_keyboard: [
+//         [
+//           {
+//             text: btnText.errPaymentBtn,
+//             callback_data: "back",
+//           },
+//         ],
+//       ],
+//     };
+//   }
+// };
+
+const pay_btn_month = () => {
   if (paymentInfo.pay_link) {
     return {
-      inline_keyboard: [
-        [
-          {
-            text: btnText.buy,
-            callback_data: "btn_3",
-            url: paymentInfo.pay_link,
-          },
+      reply_markup: {
+        resize_keyboard: true,
+        inline_keyboard: [
+          [
+            {
+              text: btnText.month,
+              web_app: {
+                url: `${paymentInfo.pay_link}`,
+              },
+            },
+          ],
+          [{ text: btnText.back, callback_data: "back" }],
         ],
-        [{ text: btnText.back, callback_data: "back" }],
-      ],
+      },
     };
   } else {
     return {
-      inline_keyboard: [
-        [
-          {
-            text: btnText.errPaymentBtn,
-            callback_data: "back",
-          },
-        ],
-      ],
+      reply_markup: {
+        resize_keyboard: true,
+        inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+      },
     };
   }
 };
+
+const pay_btn_three_month = () => {
+  if (paymentInfo.pay_link) {
+    return {
+      reply_markup: {
+        resize_keyboard: true,
+        inline_keyboard: [
+          [
+            {
+              text: btnText.threeMonth,
+              web_app: {
+                url: `${paymentInfo.pay_link}`,
+              },
+            },
+          ],
+          [{ text: btnText.back, callback_data: "back" }],
+        ],
+      },
+    };
+  } else {
+    return {
+      reply_markup: {
+        resize_keyboard: true,
+        inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+      },
+    };
+  }
+};
+
 // const pay_btn = () => {
 //     return {
 //       inline_keyboard: [
@@ -176,12 +267,16 @@ const cancelSecurityPayment = {
 };
 
 module.exports = {
+  keyboardTariff,
   keyboardDefault,
   keyboardDefaultReplay,
   keyboardGeneral,
   subscription,
   pay_btns,
+  pay_btn_month,
+  pay_btn_three_month,
   btnIsPayment,
   cancelPayment,
   cancelSecurityPayment,
+  buyBtn,
 };

@@ -40,6 +40,33 @@ const createUser = () => {
   });
   connectDb().on("error", console.log).on("disconnect", connectDb);
 };
+
+const updateUserPayInfo = (
+  userId,
+  subscribe,
+  order_id,
+  deleteDate,
+  addDate
+) => {
+  connectDb();
+  SubsUsersSchema.updateOne(
+    { user_id: userId },
+    {
+      $set: {
+        subscribe: null,
+        order_id: null,
+        deleteDate: null,
+        addDate: null,
+      },
+    },
+    (err, result) => {
+      if (err) {
+        console.log("Unable update user: ", err);
+      }
+    }
+  );
+  connectDb().on("error", console.log).on("disconnect", connectDb);
+};
 const updateUser = (
   userId,
   pay,
@@ -251,4 +278,6 @@ module.exports = {
   recurringPayResponseDB,
   updateUserStatusPay,
   updateUserLang,
+
+  updateUserPayInfo,
 };

@@ -18,6 +18,8 @@ const generateSignature = (data) => {
     ...data.productPrice,
   ].join(";");
 
+  console.log("dataToSign", dataToSign);
+
   return crypto
     .createHmac("md5", process.env.SECRET_KEY)
     .update(dataToSign, "utf8")

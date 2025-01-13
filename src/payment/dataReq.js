@@ -1,5 +1,21 @@
 require("dotenv").config();
 
+const requestData = {
+  transactionType: "CREATE_INVOICE",
+  merchantAccount: process.env.MERCHANT_ID,
+  merchantDomainName: "https://t.me/Insight_Room2_bot",
+  orderDate: Math.floor(new Date().getTime() / 1000),
+  orderReference: String,
+  amount: Number,
+  currency: "UAH",
+  productName: Array,
+  productCount: [1],
+  productPrice: Array,
+  merchantSignature: String,
+  apiVersion: "1",
+  serviceUrl: process.env.CALL_BACK_URL,
+};
+
 const requestDataMonth = {
   transactionType: "CREATE_INVOICE",
   merchantAccount: process.env.MERCHANT_ID,
@@ -15,6 +31,7 @@ const requestDataMonth = {
   apiVersion: "1",
   serviceUrl: process.env.CALL_BACK_URL,
 };
+
 const requestDataThreeMonth = {
   transactionType: "CREATE_INVOICE",
   merchantAccount: process.env.MERCHANT_ID,
@@ -58,7 +75,13 @@ const paymentInfoThreeMonth = {
   pay_link: "",
 };
 
+const paymentInfo = {
+  pay_link: "",
+};
+
 module.exports = {
+  requestData,
+  paymentInfo,
   requestDataMonth,
   requestDataThreeMonth,
   resData,

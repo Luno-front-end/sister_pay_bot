@@ -6,6 +6,8 @@ const { text, btnText, paymentTitle } = require("./constantsUA");
 // const { textRu, btnTextRu, paymentTitleRu } = require("./constantsRU");
 
 const {
+  requestData,
+  paymentInfo,
   requestDataMonth,
   requestDataThreeMonth,
   paymentInfoMonth,
@@ -17,11 +19,14 @@ const {
   keyboardDefaultReplay,
   keyboardGeneral,
   subscription,
-  pay_btn,
+  pay_btn_month,
+  pay_btn_three_month,
   pay_btns,
   cancelPayment,
   btnIsPayment,
   cancelSecurityPayment,
+  buyBtn,
+  keyboardTariff,
 } = require("./components/buttons");
 const {
   keyboardDefaultRu,
@@ -192,12 +197,12 @@ bot.onText(/\/start/, async (msg) => {
 bot.on("callback_query", async (query) => {
   try {
     //chat info
-    console.log(query);
+    // console.log(query);
 
     const nameBtn = query.data;
     const id = query.id;
     const chat_id = query.message.chat.id;
-    // const message_id = query.message.message_id;
+    const message_id = query.message.message_id;
 
     const userId = query.from.id;
     const userFirstName = query.from.first_name;
@@ -207,7 +212,7 @@ bot.on("callback_query", async (query) => {
     // updateUserLang(userId, lang);
 
     const user = await getOneUserById(userId);
-    console.log(user);
+    // console.log(user);
 
     if (nameBtn === "buy_btn") {
       await bot.answerCallbackQuery(id);
@@ -219,15 +224,19 @@ bot.on("callback_query", async (query) => {
 
       // const generateId = uuidv4();
 
+      await bot.sendMessage(chat_id, text.choiceTariff, {
+        ...keyboardTariff,
+      });
+
       if (user.length === 0) {
         addInfoUserDB(
           userId,
           userFirstName,
           userLastName,
           username
+          // generateId,
           // subscribe
           // nameBtn,
-          // generateId,
           // paymentInfo.pay_id,
           // requestData.request.amount,
           // paymentTitle.titleStandart
@@ -247,53 +256,29 @@ bot.on("callback_query", async (query) => {
       }
 
       // requestDataMonth.serviceUrl = "https://ea9c-78-159-35-159.ngrok-free.app";
-      requestDataMonth.orderReference = uuidv4();
 
-      const merchantSignatureMonth = generateSignature({
-        merchantDomainName: requestDataMonth.merchantDomainName,
-        orderReference: requestDataMonth.orderReference,
-        orderDate: requestDataMonth.orderDate,
-        amount: requestDataMonth.amount,
-        currency: requestDataMonth.currency,
-        productName: requestDataMonth.productName,
-        productCount: requestDataMonth.productCount,
-        productPrice: requestDataMonth.productPrice,
-      });
+      // requestDataThreeMonth.orderReference = uuidv4();
 
-      requestDataThreeMonth.orderReference = uuidv4();
+      // const merchantSignatureThreeMonth = generateSignature({
+      //   merchantDomainName: requestDataThreeMonth.merchantDomainName,
+      //   orderReference: requestDataThreeMonth.orderReference,
+      //   orderDate: requestDataThreeMonth.orderDate,
+      //   amount: requestDataThreeMonth.amount,
+      //   currency: requestDataThreeMonth.currency,
+      //   productName: requestDataThreeMonth.productName,
+      //   productCount: requestDataThreeMonth.productCount,
+      //   productPrice: requestDataThreeMonth.productPrice,
+      // });
 
-      const merchantSignatureThreeMonth = generateSignature({
-        merchantDomainName: requestDataThreeMonth.merchantDomainName,
-        orderReference: requestDataThreeMonth.orderReference,
-        orderDate: requestDataThreeMonth.orderDate,
-        amount: requestDataThreeMonth.amount,
-        currency: requestDataThreeMonth.currency,
-        productName: requestDataThreeMonth.productName,
-        productCount: requestDataThreeMonth.productCount,
-        productPrice: requestDataThreeMonth.productPrice,
-      });
+      // requestDataThreeMonth.merchantSignature = merchantSignatureThreeMonth;
 
-      requestDataMonth.merchantSignature = merchantSignatureMonth;
-      requestDataThreeMonth.merchantSignature = merchantSignatureThreeMonth;
+      // const paymentInfoResThree = await reqWFPThreeMonth();
 
-      // console.log(requestDataMonth);
-      // console.log(requestDataThreeMonth);
+      // paymentInfoThreeMonth.pay_link = paymentInfoResThree.invoiceUrl;
 
-      const paymentInfoRes = await reqWFPMonth();
-      const paymentInfoResThree = await reqWFPThreeMonth();
-
-      // console.log("paymentInfo", paymentInfoRes);
-      // console.log("paymentInfo", paymentInfoResThree);
-
-      paymentInfoMonth.pay_link = paymentInfoRes.invoiceUrl;
-      paymentInfoThreeMonth.pay_link = paymentInfoResThree.invoiceUrl;
-
-      // console.log(paymentInfoRes.invoiceUrl);
-      // console.log(paymentInfoResThree.invoiceUrl);
-
-      await bot.sendMessage(chat_id, text.choiceTariff, {
-        ...pay_btns(),
-      });
+      // await bot.sendMessage(chat_id, text.choiceTariff, {
+      //   ...pay_btns(),
+      // });
 
       // await bot.editMessageText(
       //   textRu.priceDays,
@@ -388,7 +373,7 @@ bot.on("callback_query", async (query) => {
       // });
 
       await bot.sendMessage(chat_id, text.moreInfo, {
-        reply_markup: buyBtnRu,
+        reply_markup: buyBtn,
       });
 
       // requestData.request.amount = 15000;
@@ -456,6 +441,74 @@ bot.on("callback_query", async (query) => {
       // }
     }
 
+    if (nameBtn === "month") {
+      await bot.answerCallbackQuery(id);
+
+      const orderIdGenerate = uuidv4();
+
+      requestData.orderReference = orderIdGenerate;
+      requestData.amount = 2;
+      requestData.productName = ["Підписка на місяць"];
+      requestData.productPrice = [2];
+
+      const merchantSignature = generateSignature({
+        merchantDomainName: requestData.merchantDomainName,
+        orderReference: requestData.orderReference,
+        orderDate: requestData.orderDate,
+        amount: requestData.amount,
+        currency: requestData.currency,
+        productName: requestData.productName,
+        productCount: requestData.productCount,
+        productPrice: requestData.productPrice,
+      });
+
+      requestData.merchantSignature = merchantSignature;
+
+      const paymentInfoRes = await reqWFPMonth();
+
+      paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
+
+      bot.editMessageText(text.selectedTariffMonth, {
+        chat_id,
+        message_id: message_id,
+        ...pay_btn_month(),
+      });
+    }
+
+    if (nameBtn === "three_month") {
+      await bot.answerCallbackQuery(id);
+
+      const orderIdGenerate = uuidv4();
+
+      requestData.orderReference = orderIdGenerate;
+      requestData.amount = 3500;
+      requestData.productName = ["Підписка на 3 місяці"];
+      requestData.productPrice = [3500];
+
+      const merchantSignature = generateSignature({
+        merchantDomainName: requestData.merchantDomainName,
+        orderReference: requestData.orderReference,
+        orderDate: requestData.orderDate,
+        amount: requestData.amount,
+        currency: requestData.currency,
+        productName: requestData.productName,
+        productCount: requestData.productCount,
+        productPrice: requestData.productPrice,
+      });
+
+      requestData.merchantSignature = merchantSignature;
+
+      const paymentInfoRes = await reqWFPMonth();
+
+      paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
+
+      bot.editMessageText(text.selectedTariffMonth, {
+        chat_id,
+        message_id: message_id,
+        ...pay_btn_three_month(),
+      });
+    }
+
     // if (nameBtn === "btn_3") {
     //   await bot.answerCallbackQuery(id);
     //   bot.editMessageText({
@@ -466,15 +519,14 @@ bot.on("callback_query", async (query) => {
     //   });
     // }
 
-    // if (nameBtn === "back") {
-    //   await bot.answerCallbackQuery(id);
-    //   bot.editMessageText(lang === "uk" ? text.choice : textRu.choice, {
-    //     chat_id,
-    //     message_id: message_id,
-    //     reply_markup:
-    //       lang === "uk" ? keyboardDefaultReplay : keyboardDefaultReplayRu,
-    //   });
-    // }
+    if (nameBtn === "back") {
+      await bot.answerCallbackQuery(id);
+      bot.editMessageText(text.choiceTariff, {
+        chat_id,
+        message_id: message_id,
+        ...keyboardTariff,
+      });
+    }
     // if (nameBtn === "btn_5") {
     //   await bot.answerCallbackQuery(id);
     //   bot.editMessageText(lang === "uk" ? text.choice : textRu.choice, {
@@ -508,6 +560,11 @@ bot.on("callback_query", async (query) => {
     console.error(error);
   }
 });
+
+// bot.on("message", (msg) => {
+//   const chatId = msg.chat.id;
+//   bot.sendMessage(chatId, "Привіт! Я ваш бот.");
+// });
 
 // bot.on("callback_query", async (query) => {
 //   try {

@@ -8,6 +8,8 @@ const {
   requestDataThreeMonth,
 } = require("./dataReq");
 
+const { updateUserPayInfo } = require("../mongoDb/index");
+
 require("dotenv").config();
 
 // const postUrl = "https://pay.fondy.eu/api/checkout/url/";
@@ -47,7 +49,7 @@ const axiosInstance = axios.create({
 
 const reqWFPMonth = async () => {
   return await axiosInstance
-    .post(`${baseURL}`, requestDataMonth)
+    .post(`${baseURL}`, requestData)
     .then((res) => res.data)
     .catch((error) => {
       console.log(error);
@@ -65,7 +67,18 @@ const reqWFPThreeMonth = async () => {
 const resPayment = async () => {
   return await axiosInstance
     .post(`${baseURL}`, resData)
-    .then((res) => res.data)
+    .then((res) => {
+      // productName
+      // updateUserPayInfo({
+      //   userId: requestDataMonth,
+      //   subscribe,
+      //   order_id,
+      //   deleteDate,
+      //   addDate,
+      // });
+
+      return res.data;
+    })
     .catch((error) => {
       console.log(error);
     });
