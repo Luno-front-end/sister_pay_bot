@@ -13,7 +13,7 @@ const requestDataMonth = {
   productPrice: [2],
   merchantSignature: String,
   apiVersion: "1",
-  serviceUrl: "https://e29f-78-159-35-159.ngrok-free.app/fondyPay",
+  serviceUrl: process.env.CALL_BACK_URL,
 };
 const requestDataThreeMonth = {
   transactionType: "CREATE_INVOICE",
@@ -28,7 +28,7 @@ const requestDataThreeMonth = {
   productPrice: [13500],
   merchantSignature: String,
   apiVersion: "1",
-  serviceUrl: "https://e29f-78-159-35-159.ngrok-free.app/fondyPay",
+  serviceUrl: process.env.CALL_BACK_URL,
 };
 
 const recurringData = {
