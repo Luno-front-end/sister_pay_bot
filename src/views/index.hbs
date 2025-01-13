@@ -1,0 +1,93 @@
+{{#if allUsers.length}}
+  {{#each allUsers}}
+
+    <section class="user">
+
+      <div class="info {{getColorStatus payment.order_status}}">
+        <div class="status">
+          <span class="status-text">{{getStatus payment.order_status}}
+            {{#if deleteDate}} (Дата видалення: {{deleteDate}}) {{/if}}</span>
+        </div>
+        <div class="data">
+          <div class="data-user">
+            <ul class="information">
+              <li class="information-item">
+                <span class="mar">Імʼя та фамілія:</span>
+                <span class="information-el name">{{first_name}}
+                  {{last_name}}</span>
+              </li>
+              <li class="information-item">
+                <span class="mar">Telegram нікнейм:</span>
+                <span class="information-el nickname">{{username}}</span>
+              </li>
+              <li class="information-item">
+                <span class="mar">Пошта:</span>
+                <span
+                  class="information-el mail"
+                >{{payment.sender_email}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="data-info">
+            <div class="sub">
+              <ul class="pay">
+                <li class="pay-item">
+                  <span class="mar">Оплата:</span>
+                  <span class="pay-el sub-money">{{pay}}$</span>
+                </li>
+                <li class="pay-item">
+                  <span class="mar">Статус підписки:</span>
+                  <span class="pay-el sub-status">{{getStatus
+                      payment.order_status
+                    }}</span>
+                </li>
+                <li class="pay-item">
+                  <span class="mar">Яка підписка:</span>
+                  <span class="pay-el sub-type">{{order_desc}}</span>
+                </li>
+                <li class="pay-item">
+                  <span class="mar">Система: </span>
+                  <span class="pay-el sub-type">
+
+                    {{#if payment.payment_system}}
+                      {{payment.payment_system}}
+                    {{else}} невідомо {{/if}}</span>
+                </li>
+                <li class="pay-item">
+                  <span class="mar">Карта: </span>
+                  <span class="pay-el sub-type">
+                    {{#if payment.card_type}}
+                      {{payment.card_type}}
+                    {{else}} невідомо {{/if}}</span>
+                </li>
+
+              </ul>
+            </div>
+            <div class="order">
+              <ul class="order-info">
+                <li class="order-item">
+                  <span class="mar">ID замовлення:</span>
+                  <span class="order-el order-id">{{order_id}}</span>
+                </li>
+                <li class="order-item">
+                  <span class="mar">Дата оформлення підписки:</span>
+                  <span class="order-el order-sud-in">{{payment.datePay}}</span>
+                </li>
+                <li class="order-item">
+                  <span class="mar">Дата зупинки підписки:</span>
+                  <span
+                    class="order-el order-sud-out"
+                  >{{payment.dateEnd}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  {{/each}}
+
+{{else}}
+  <p>Немає нічого</p>
+{{/if}}
