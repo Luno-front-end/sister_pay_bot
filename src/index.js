@@ -8,8 +8,6 @@ const { text, btnText, paymentTitle } = require("./constantsUA");
 const {
   requestData,
   paymentInfo,
-  requestDataMonth,
-  requestDataThreeMonth,
   paymentInfoMonth,
   paymentInfoThreeMonth,
   recurringData,
@@ -84,111 +82,10 @@ bot.onText(/\/start/, async (msg) => {
     //   reply_markup: keyboardGeneralRu,
     // });
 
-    //     merchantAccount, merchantDomainName, orderReference, orderDate, amount, currency, productName [0],
-
-    // productName [1] ..., productName [n], productCount [0], productCount [1], ..., productCount [n],
-    //  productPrice [0], productPrice [1], ..., productPrice [n]
-
-    //////////////////////////
-    // const secretKey = "b626e76d19497d4f6a469f19a484230270fea10a";
-
-    // Функція для формування підпису
-    // function generateSignature(
-    //   merchantAccount,
-    //   merchantDomainName,
-    //   orderReference,
-    //   orderDate,
-    //   amount,
-    //   currency,
-    //   productName,
-    //   productCount,
-    //   productPrice
-    // ) {
-    //   const dataToSign = [
-    //     merchantAccount,
-    //     merchantDomainName,
-    //     orderReference,
-    //     orderDate,
-    //     amount,
-    //     currency,
-    //     ...productName,
-    //     ...productCount,
-    //     ...productPrice,
-    //   ].join(";");
-
-    //   console.log(dataToSign);
-
-    //   return crypto
-    //     .createHmac("md5", secretKey)
-    //     .update(dataToSign, "utf8")
-    //     .digest("hex");
-    // }
-
-    // Дані для запиту
-    // const merchantAccount = "t_me_4c955";
-    // const merchantDomainName = "https://t.me/Insight_Room2_bot";
-    // const orderReference = "18273hfuawkdccdawdwdawuuddaw2hw3xy";
-    // const orderDate = Math.floor(new Date().getTime() / 1000); // Поточна дата у форматі Unix timestamp
-    // const amount = "400";
-    // const currency = "UAH";
-    // const productName = ["Підписка на місяць"];
-    // const productCount = ["1"];
-    // const productPrice = ["400"];
-    // const serviceUrl = "https://ea9c-78-159-35-159.ngrok-free.app";
-
-    // const merchantSignature = generateSignature(
-    // merchantAccount,
-    // merchantDomainName,
-    // orderReference,
-    // orderDate,
-    // amount,
-    // currency,
-    // productName,
-    // productCount,
-    // productPrice
-    // );
-
-    // Тіло запиту
-    // const requestBody = {
-    //   transactionType: "CREATE_INVOICE",
-    //   merchantAccount,
-    //   merchantDomainName,
-    //   orderReference,
-    //   orderDate,
-    //   amount,
-    //   currency,
-    //   productName,
-    //   productCount,
-    //   productPrice,
-    //   merchantSignature,
-    //   apiVersion: "1",
-    //   // serviceUrl,
-    //   // alternativeCurrency: ["USD", "UAH"],
-    //   // alternativeAmount: ["10", "400"],
-    // };
-
-    // Відправка запиту
-    // await axios
-    //   .post("https://api.wayforpay.com/api", requestBody, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log("Успіх:", response.data);
-    //     paymentInfo.pay_link = response.data.invoiceUrl;
-    //   })
-    //   .catch((error) => {
-    //     console.error("Помилка:", error.response?.data || error.message);
-    //   });
-
     await bot.sendMessage(chat_id, text.caption);
     await bot.sendMessage(chat_id, text.caption_two, {
       ...keyboardDefault,
     });
-    // await bot.sendMessage(chat_id, text.caption_two, {
-    //   ...pay_btns(),
-    // });
   } catch (error) {
     console.error(error);
   }
@@ -208,8 +105,6 @@ bot.on("callback_query", async (query) => {
     const userFirstName = query.from.first_name;
     const userLastName = query.from.last_name;
     const username = query.from.username;
-
-    // updateUserLang(userId, lang);
 
     const user = await getOneUserById(userId);
     // console.log(user);
@@ -254,86 +149,6 @@ bot.on("callback_query", async (query) => {
         //   // );
         // }
       }
-
-      // requestDataMonth.serviceUrl = "https://ea9c-78-159-35-159.ngrok-free.app";
-
-      // requestDataThreeMonth.orderReference = uuidv4();
-
-      // const merchantSignatureThreeMonth = generateSignature({
-      //   merchantDomainName: requestDataThreeMonth.merchantDomainName,
-      //   orderReference: requestDataThreeMonth.orderReference,
-      //   orderDate: requestDataThreeMonth.orderDate,
-      //   amount: requestDataThreeMonth.amount,
-      //   currency: requestDataThreeMonth.currency,
-      //   productName: requestDataThreeMonth.productName,
-      //   productCount: requestDataThreeMonth.productCount,
-      //   productPrice: requestDataThreeMonth.productPrice,
-      // });
-
-      // requestDataThreeMonth.merchantSignature = merchantSignatureThreeMonth;
-
-      // const paymentInfoResThree = await reqWFPThreeMonth();
-
-      // paymentInfoThreeMonth.pay_link = paymentInfoResThree.invoiceUrl;
-
-      // await bot.sendMessage(chat_id, text.choiceTariff, {
-      //   ...pay_btns(),
-      // });
-
-      // await bot.editMessageText(
-      //   textRu.priceDays,
-      //   {
-      //     chat_id,
-      //     message_id: message_id,
-      //     reply_markup:
-      //       lang === "uk" ? { ...pay_btn() } : { ...pay_btnRu() },
-      //   }
-      // );
-
-      // requestData.amount = 5000;
-      // requestData.request.order_id = generateId;
-      // requestData.request.order_desc = paymentTitleRu.titleStandart;
-      // requestData.request.signature = createShaPost();
-
-      // await reqFondy().then((res) => {
-      //   paymentInfo.pay_id = res.response.payment_id;
-      //   paymentInfo.pay_link = res.response.checkout_url;
-      // });
-
-      // addInfoUserDB(
-      //   userId,
-      //   userFirstName,
-      //   userLastName,
-      //   username,
-      //   nameBtn,
-      //   generateId,
-      //   paymentInfo.pay_id,
-      //   requestData.request.amount,
-      //   lang === "uk"
-      //     ? paymentTitle.titleStandart
-      //     : paymentTitleRu.titleStandart,
-      //   lang
-      // );
-
-      // resData.request.order_id = generateId;
-      // resData.request.signature = createShaRes();
-
-      // if (!user[0]?.payment.order_id) {
-      //   if (user.length === 0) {
-      //     createUser();
-      //   } else {
-      //     updateUser(
-      //       userId,
-      //       priceConverter(requestData.request.amount),
-      //       nameBtn,
-      //       generateId,
-      //       paymentInfo.pay_id,
-      //       lang === "uk"
-      //         ? paymentTitle.titleStandart
-      //         : paymentTitleRu.titleStandart,
-      //       lang
-      //     );
-      //   }
 
       //   setTimeout(async () => {
       //   await bot.editMessageText(

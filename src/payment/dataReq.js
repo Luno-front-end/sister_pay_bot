@@ -16,38 +16,6 @@ const requestData = {
   serviceUrl: process.env.CALL_BACK_URL,
 };
 
-const requestDataMonth = {
-  transactionType: "CREATE_INVOICE",
-  merchantAccount: process.env.MERCHANT_ID,
-  merchantDomainName: "https://t.me/Insight_Room2_bot",
-  orderDate: Math.floor(new Date().getTime() / 1000),
-  orderReference: String,
-  amount: 2,
-  currency: "UAH",
-  productName: ["Підписка на місяць"],
-  productCount: [1],
-  productPrice: [2],
-  merchantSignature: String,
-  apiVersion: "1",
-  serviceUrl: process.env.CALL_BACK_URL,
-};
-
-const requestDataThreeMonth = {
-  transactionType: "CREATE_INVOICE",
-  merchantAccount: process.env.MERCHANT_ID,
-  merchantDomainName: "https://t.me/Insight_Room2_bot",
-  orderDate: Math.floor(new Date().getTime() / 1000),
-  orderReference: String,
-  amount: 13500,
-  currency: "UAH",
-  productName: ["Підписка на 3 місяці"],
-  productCount: [1],
-  productPrice: [13500],
-  merchantSignature: String,
-  apiVersion: "1",
-  serviceUrl: process.env.CALL_BACK_URL,
-};
-
 const recurringData = {
   request: {
     order_id: String,
@@ -82,8 +50,7 @@ const paymentInfo = {
 module.exports = {
   requestData,
   paymentInfo,
-  requestDataMonth,
-  requestDataThreeMonth,
+
   resData,
   paymentInfoMonth,
   paymentInfoThreeMonth,

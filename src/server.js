@@ -47,7 +47,7 @@ const server = () => {
 
   app.all("/statusPay", async (req, res) => {
     const response = await req.body;
-    console.log(response);
+    console.log("response", response);
 
     // if (response.order_status === "approved") {
     //   await updateUserForPay(
