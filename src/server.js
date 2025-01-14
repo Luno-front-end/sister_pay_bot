@@ -45,7 +45,7 @@ const server = () => {
     res.end();
   });
 
-  app.post("/statusPay", async (req, res) => {
+  app.all("/statusPay", async (req, res) => {
     // const response = await req.body;
     // console.log("response", response);
 
