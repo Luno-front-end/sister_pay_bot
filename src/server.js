@@ -46,8 +46,20 @@ const server = () => {
   });
 
   app.post("/statusPay", async (req, res) => {
-    const response = await req.body;
-    console.log("response", response);
+    // const response = await req.body;
+    // console.log("response", response);
+
+    try {
+      const rawData = req.body; // Отримуємо raw data
+      const jsonData = JSON.parse(rawData); // Парсимо JSON з raw data
+      console.log("Received JSON:", jsonData);
+
+      // Логіка обробки даних
+      res.status(200).send("OK");
+    } catch (err) {
+      console.error("Error parsing JSON:", err);
+      res.status(400).send("Invalid JSON");
+    }
 
     // if (response.order_status === "approved") {
     //   await updateUserForPay(
