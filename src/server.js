@@ -51,8 +51,10 @@ const server = () => {
 
     try {
       const rawData = req.body; // Отримуємо raw data
-      const jsonData = JSON.parse(rawData); // Парсимо JSON з raw data
-      console.log("Received JSON:", jsonData);
+      console.log("Received raw data:", rawData);
+
+      // const jsonData = JSON.parse(rawData); // Парсимо JSON з raw data
+      // console.log("Received JSON:", jsonData);
 
       // Логіка обробки даних
       res.status(200).send("OK");
