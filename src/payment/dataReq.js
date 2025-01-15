@@ -4,7 +4,7 @@ const requestData = {
   transactionType: "CREATE_INVOICE",
   merchantAccount: process.env.MERCHANT_ID,
   merchantDomainName: "https://t.me/Insight_Room2_bot",
-  orderDate: Math.floor(new Date().getTime() / 1000),
+  orderDate: String,
   orderReference: String,
   amount: Number,
   currency: "UAH",

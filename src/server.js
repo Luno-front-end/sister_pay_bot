@@ -51,11 +51,12 @@ const server = () => {
       console.log(res.body);
       console.log("Received raw data:", rawData); // Виводимо дані вейФорПей про оплату користувача
 
-      res
-        .status(200)
-        .send(
-          "тут після успішного прийому відповіді від вейФорПей з даними користувача про оплату я маю надати відповдь ВейФоПей"
-        );
+      res.status(200).send({
+        orderReference: "b70f69a9-0e6d-4439-b63d-100aa4b1adb2",
+        status: "accept",
+        time: 1736963637,
+        signature: "1c1ff8236226b6c4a626e6231cf99d2c",
+      });
     } catch (err) {
       console.error("Error parsing JSON:", err);
       res.status(400).send("Invalid JSON");

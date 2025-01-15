@@ -262,10 +262,13 @@ bot.on("callback_query", async (query) => {
 
       const orderIdGenerate = uuidv4();
 
+      const time = Math.floor(new Date().getTime() / 1000);
+
       requestData.orderReference = orderIdGenerate;
       requestData.amount = 2;
       requestData.productName = ["Підписка на місяць"];
       requestData.productPrice = [2];
+      requestData.orderDate = time;
 
       const merchantSignature = generateSignature({
         merchantDomainName: requestData.merchantDomainName,
@@ -295,7 +298,8 @@ bot.on("callback_query", async (query) => {
       updateSecureOrderUser(
         userId,
         merchantSignature,
-        requestData.orderReference
+        requestData.orderReference,
+        time
       );
 
       bot.editMessageText(text.selectedTariffMonth, {
