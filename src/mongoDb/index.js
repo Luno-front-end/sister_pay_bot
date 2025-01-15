@@ -67,6 +67,26 @@ const updateUserPayInfo = (
   );
   connectDb().on("error", console.log).on("disconnect", connectDb);
 };
+
+const updateSecureOrderUser = (userId, signature, order_id) => {
+  connectDb();
+  SubsUsersSchema.updateOne(
+    { user_id: userId },
+    {
+      $set: {
+        signature: signature,
+        order_id,
+      },
+    },
+    (err, result) => {
+      if (err) {
+        console.log("Unable update user: ", err);
+      }
+    }
+  );
+  connectDb().on("error", console.log).on("disconnect", connectDb);
+};
+
 const updateUser = (
   userId,
   pay,
@@ -279,5 +299,6 @@ module.exports = {
   updateUserStatusPay,
   updateUserLang,
 
+  updateSecureOrderUser,
   updateUserPayInfo,
 };

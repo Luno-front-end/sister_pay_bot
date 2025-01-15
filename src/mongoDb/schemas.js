@@ -12,6 +12,7 @@ const subsUsers = new Schema({
   payment_id: Number,
   deleteDate: String,
   addDate: String,
+  signature: String,
   payment: {
     sender_email: String,
     order_id: String,

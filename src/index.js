@@ -39,6 +39,7 @@ const {
 } = require("./components/buttonsRu");
 const {
   createUser,
+  updateSecureOrderUser,
   updateUser,
   getOneUserById,
   getAllUsers,
@@ -281,11 +282,21 @@ bot.on("callback_query", async (query) => {
 
       const paymentInfoRes = await reqWFPMonth();
 
+      console.log("====================================");
+      console.log(paymentInfoRes);
+      console.log("====================================");
+
       paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
 
       console.log("====================================");
       console.log(requestData.orderReference);
       console.log("====================================");
+
+      updateSecureOrderUser(
+        userId,
+        merchantSignature,
+        requestData.orderReference
+      );
 
       bot.editMessageText(text.selectedTariffMonth, {
         chat_id,
