@@ -283,6 +283,10 @@ bot.on("callback_query", async (query) => {
 
       paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
 
+      console.log("====================================");
+      console.log(requestData.orderReference);
+      console.log("====================================");
+
       bot.editMessageText(text.selectedTariffMonth, {
         chat_id,
         message_id: message_id,
