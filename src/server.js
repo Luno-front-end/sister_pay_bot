@@ -47,7 +47,8 @@ const server = () => {
 
   app.post("/statusPay", async (req, res) => {
     try {
-      const rawData = req; // Отримуємо raw data
+      const rawData = req.body; // Отримуємо raw data
+      console.log(res.body);
       console.log("Received raw data:", rawData); // Виводимо дані вейФорПей про оплату користувача
 
       res
