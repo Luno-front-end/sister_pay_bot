@@ -37,11 +37,11 @@ const addInfoUserDB = (
   userName,
   order_desc,
   amount,
-  orderId
+  order_id
   // payId,
   // title
 ) => {
-  console.log("orderId", orderId);
+  console.log("order_id", order_id);
 
   userInfo.first_name = firstName;
   userInfo.last_name = lastName;
@@ -49,7 +49,7 @@ const addInfoUserDB = (
   userInfo.user_id = userId;
   userInfo.order_desc = order_desc;
   userInfo.pay = amount;
-  userInfo.orderId = orderId;
+  userInfo.order_id = order_id;
   // userInfo.subscribe = subscribe;
   // userInfo.payment_id = payId;
   // userInfo.order_desc = title;

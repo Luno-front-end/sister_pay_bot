@@ -313,11 +313,10 @@ bot.on("callback_query", async (query) => {
 
       requestData.merchantSignature = merchantSignature;
 
-      const paymentInfoRes = await reqWFPMonth();
-
-      paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
-
       if (user.length === 0) {
+        console.log("====================================");
+        console.log("requestData.orderReference", requestData.orderReference);
+        console.log("====================================");
         addInfoUserDB(
           userId,
           userFirstName,
@@ -340,6 +339,10 @@ bot.on("callback_query", async (query) => {
         //   // );
         // }
       }
+
+      const paymentInfoRes = await reqWFPMonth();
+
+      paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
 
       bot.editMessageText(text.selectedTariffMonth, {
         chat_id,
