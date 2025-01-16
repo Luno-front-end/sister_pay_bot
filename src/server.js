@@ -55,11 +55,28 @@ const server = () => {
 
       console.log("Received raw data:", jsonData);
 
-      res.status(200).send({
-        orderReference: jsonData.orderReference,
+      console.log("====================================");
+      console.log({
+        orderReference: jsonData?.orderReference,
         status: "accept",
-        time: jsonData.createdDate,
-        signature: generateSignatureRes(),
+        time: jsonData?.createdDate,
+        signature: generateSignatureRes(
+          jsonData?.orderReference,
+          "accept",
+          jsonData?.createdDate
+        ),
+      });
+      console.log("====================================");
+
+      res.status(200).send({
+        orderReference: jsonData?.orderReference,
+        status: "accept",
+        time: jsonData?.createdDate,
+        signature: generateSignatureRes(
+          jsonData?.orderReference,
+          "accept",
+          jsonData?.createdDate
+        ),
       });
     } catch (err) {
       console.error("Error parsing JSON:", err);
