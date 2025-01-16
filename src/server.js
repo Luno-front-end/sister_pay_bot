@@ -55,45 +55,46 @@ const server = () => {
 
       // console.log("Received raw data:", jsonData);
 
-      res.status(200).send({
-        orderReference: jsonData?.orderReference,
-        status: "accept",
-        time: jsonData?.createdDate,
-        signature: generateSignatureRes(
-          jsonData?.orderReference,
-          "accept",
-          jsonData?.createdDate
-        ),
-      });
+      if (jsonData.transactionStatus === "Approved") {
+        await updateUserForPay(
+          jsonData.email,
+          jsonData.orderReference,
+          jsonData.transactionStatus.toLowerCase(),
+          jsonData.phone,
+          timeEditPay(jsonData.createdDate),
+          jsonData.amount,
+          jsonData.paymentSystem,
+          jsonData.cardType
+        );
+
+        res.status(200).send({
+          orderReference: jsonData?.orderReference,
+          status: "accept",
+          time: jsonData?.createdDate,
+          signature: generateSignatureRes(
+            jsonData?.orderReference,
+            "accept",
+            jsonData?.createdDate
+          ),
+        });
+        res.end();
+      }
+
+      // res.status(200).send({
+      //   orderReference: jsonData?.orderReference,
+      //   status: "accept",
+      //   time: jsonData?.createdDate,
+      //   signature: generateSignatureRes(
+      //     jsonData?.orderReference,
+      //     "accept",
+      //     jsonData?.createdDate
+      //   ),
+      // });
     } catch (err) {
       console.error("Error parsing JSON:", err);
       res.status(400).send("Invalid JSON");
     }
 
-    if (jsonData.transactionStatus === "Approved") {
-      await updateUserForPay(
-        jsonData.email,
-        jsonData.orderReference,
-        jsonData.transactionStatus.toLowerCase(),
-        jsonData.phone,
-        timeEditPay(jsonData.createdDate),
-        jsonData.amount,
-        jsonData.paymentSystem,
-        jsonData.cardType
-      );
-
-      res.status(200).send({
-        orderReference: jsonData?.orderReference,
-        status: "accept",
-        time: jsonData?.createdDate,
-        signature: generateSignatureRes(
-          jsonData?.orderReference,
-          "accept",
-          jsonData?.createdDate
-        ),
-      });
-      res.end();
-    }
     // if (response.order_status === "declined") {
     //   await updateUserStatusPay(
     //     response.payment_id,
