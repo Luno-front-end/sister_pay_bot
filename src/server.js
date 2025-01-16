@@ -70,11 +70,11 @@ const server = () => {
       res.status(400).send("Invalid JSON");
     }
 
-    if (response.order_status === "Approved") {
+    if (jsonData.transactionStatus === "Approved") {
       await updateUserForPay(
         jsonData.email,
         jsonData.orderReference,
-        jsonData.transactionStatus,
+        jsonData.transactionStatus.toLowerCase(),
         jsonData.phone,
         timeEditPay(jsonData.createdDate),
         jsonData.amount,
