@@ -142,30 +142,36 @@ const updateUserForPay = async (
   try {
     connectDb();
     const user = await getOneUsersByPayId(orderId);
-    user.length === 1
-      ? SubsUsersSchema.updateOne(
-          {
-            $set: {
-              deleteDate: null,
-              payment: {
-                sender_email: mail,
-                order_id: orderId,
-                order_status: status,
-                datePay: timePay,
-                dateEnd: dateSubs().dateEndOne,
-                amount: Number(amount),
-                payment_system: payment_system,
-                card_type: card_type,
-              },
+    console.log("====================================");
+    console.log("user", user);
+    console.log("====================================");
+    if (user.length === 1) {
+      console.log("yes");
+      SubsUsersSchema.updateOne(
+        {
+          $set: {
+            deleteDate: null,
+            payment: {
+              sender_email: mail,
+              order_id: orderId,
+              order_status: status,
+              datePay: timePay,
+              dateEnd: dateSubs().dateEndOne,
+              amount: Number(amount),
+              payment_system: payment_system,
+              card_type: card_type,
             },
           },
-          (err, result) => {
-            if (err) {
-              console.log("Unable update user: ", err);
-            }
+        },
+        (err, result) => {
+          if (err) {
+            console.log("Unable update user: ", err);
           }
-        )
-      : console.log("Щось пішло не так");
+        }
+      );
+    } else {
+      console.log("Щось пішло не так");
+    }
 
     connectDb().on("error", console.log).on("disconnect", connectDb);
   } catch (error) {

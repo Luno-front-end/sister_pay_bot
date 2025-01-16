@@ -56,6 +56,9 @@ const server = () => {
       console.log("Received raw data:", jsonData);
 
       if (jsonData.transactionStatus === "Approved") {
+        console.log("====================================");
+        console.log("TEEST");
+        console.log("====================================");
         await updateUserForPay(
           jsonData.email,
           jsonData.orderReference,
