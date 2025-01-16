@@ -157,7 +157,7 @@ const updateUserForPay = async (
               order_status: status,
               datePay: timePay,
               dateEnd: dateSubs().dateEndOne,
-              amount: Number(amount),
+              amount: amount,
               payment_system: payment_system,
               card_type: card_type,
             },

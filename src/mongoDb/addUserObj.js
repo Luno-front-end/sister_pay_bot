@@ -4,7 +4,7 @@ const userInfo = {
   username: String,
   user_id: Number,
   pay: null,
-  morderId: null,
+  orderId: null,
   order_desc: null,
   deleteDate: null,
   addDate: null,
