@@ -124,33 +124,6 @@ bot.on("callback_query", async (query) => {
         ...keyboardTariff,
       });
 
-      if (user.length === 0) {
-        addInfoUserDB(
-          userId,
-          userFirstName,
-          userLastName,
-          username
-          // generateId,
-          // subscribe
-          // nameBtn,
-          // paymentInfo.pay_id,
-          // requestData.request.amount,
-          // paymentTitle.titleStandart
-        );
-        createUser();
-        // } else {
-        //   // updateUser(
-        //   //   userId,
-        //   //   priceConverter(requestData.request.amount),
-        //   //   nameBtn,
-        //   //   generateId,
-        //   //   paymentInfo.pay_id,
-        //   //    paymentTitle.titleStandart
-        //   //   lang
-        //   // );
-        // }
-      }
-
       //   setTimeout(async () => {
       //   await bot.editMessageText(
       //     lang === "uk" ? text.priceDays : textRu.priceDays,
@@ -287,12 +260,28 @@ bot.on("callback_query", async (query) => {
 
       paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
 
-      updateSecureOrderUser(
-        userId,
-        merchantSignature,
-        requestData.orderReference,
-        time
-      );
+      if (user.length === 0) {
+        addInfoUserDB(
+          userId,
+          userFirstName,
+          userLastName,
+          username,
+          requestData.productName[0],
+          requestData.amount
+        );
+
+        createUser();
+        // } else {
+        //   // updateUser(
+        //   //   userId,
+        //   //   priceConverter(requestData.request.amount),
+        //   //   nameBtn,
+        //   //   generateId,
+        //   //   paymentInfo.pay_id,
+        //   //    paymentTitle.titleStandart
+        //   // );
+        // }
+      }
 
       bot.editMessageText(text.selectedTariffMonth, {
         chat_id,
@@ -327,6 +316,29 @@ bot.on("callback_query", async (query) => {
       const paymentInfoRes = await reqWFPMonth();
 
       paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
+
+      if (user.length === 0) {
+        addInfoUserDB(
+          userId,
+          userFirstName,
+          userLastName,
+          username,
+          requestData.productName[0],
+          requestData.amount
+        );
+
+        createUser();
+        // } else {
+        //   // updateUser(
+        //   //   userId,
+        //   //   priceConverter(requestData.request.amount),
+        //   //   nameBtn,
+        //   //   generateId,
+        //   //   paymentInfo.pay_id,
+        //   //    paymentTitle.titleStandart
+        //   // );
+        // }
+      }
 
       bot.editMessageText(text.selectedTariffMonth, {
         chat_id,

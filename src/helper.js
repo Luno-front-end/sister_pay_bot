@@ -34,19 +34,20 @@ const addInfoUserDB = (
   userId,
   firstName,
   lastName,
-  userName
-  // subscribe,
+  userName,
+  order_desc,
+  amount
   // order_id,
   // payId,
-  // ammount,
   // title
 ) => {
   userInfo.first_name = firstName;
   userInfo.last_name = lastName;
   userInfo.username = userName;
   userInfo.user_id = userId;
-  // userInfo.pay = priceConverter(ammount);
-  // userInfo.subscribe = 1;
+  userInfo.order_desc = order_desc;
+  userInfo.pay = amount;
+  // userInfo.subscribe = subscribe;
   // userInfo.order_id = order_id;
   // userInfo.payment_id = payId;
   // userInfo.order_desc = title;

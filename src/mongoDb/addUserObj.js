@@ -4,7 +4,6 @@ const userInfo = {
   username: String,
   user_id: Number,
   pay: null,
-  subscribe: null,
   order_id: null,
   order_desc: null,
   deleteDate: null,
