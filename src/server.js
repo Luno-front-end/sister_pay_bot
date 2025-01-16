@@ -15,7 +15,7 @@ const app = express();
 require("dotenv").config();
 
 // app.use(express.json());
-app.use(bodyParser.json());
+app.use(bodyParser.text({ type: "*/*" }));
 
 const server = () => {
   const hbs = exphbs.create({
@@ -50,8 +50,9 @@ const server = () => {
   app.post("/statusPay", async (req, res) => {
     try {
       const rawData = req.body;
+      const jsonData = JSON.parse(rawData);
 
-      console.log("Received raw data:", rawData);
+      console.log("Received raw data:", jsonData);
 
       res.status(200).send({
         orderReference: "b70f69a9-0e6d-4439-b63d-100aa4b1adb2",
