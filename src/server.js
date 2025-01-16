@@ -81,14 +81,14 @@ const server = () => {
       }
       if (jsonData.transactionStatus === "InProcessing") {
         await updateUserForPay(
-          jsonData.email,
+          null,
           jsonData.orderReference,
           jsonData.transactionStatus.toLowerCase(),
-          jsonData.phone,
+          null,
           timeEditPay(jsonData.createdDate),
-          jsonData.amount,
-          jsonData.paymentSystem,
-          jsonData.cardType
+          null,
+          null,
+          null
         );
 
         res.status(200).send({
@@ -105,14 +105,14 @@ const server = () => {
       }
       if (jsonData.transactionStatus === "Refunded") {
         await updateUserForPay(
-          jsonData.email,
+          null,
           jsonData.orderReference,
           jsonData.transactionStatus.toLowerCase(),
-          jsonData.phone,
+          null,
           timeEditPay(jsonData.createdDate),
-          jsonData.amount,
-          jsonData.paymentSystem,
-          jsonData.cardType
+          null,
+          null,
+          null
         );
 
         res.status(200).send({
