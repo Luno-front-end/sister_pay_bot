@@ -15,7 +15,7 @@ const app = express();
 require("dotenv").config();
 
 // app.use(express.json());
-app.use(bodyParser.text({ type: "*/*" }));
+app.use(bodyParser.json());
 
 const server = () => {
   const hbs = exphbs.create({
