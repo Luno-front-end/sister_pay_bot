@@ -13,7 +13,8 @@ const app = express();
 
 require("dotenv").config();
 
-app.use(express.json());
+// app.use(express.json());
+app.use(bodyParser.text({ type: "*/*" }));
 
 const server = () => {
   const hbs = exphbs.create({
@@ -47,9 +48,9 @@ const server = () => {
 
   app.post("/statusPay", async (req, res) => {
     try {
-      const rawData = req.body; // Отримуємо raw data
-      console.log(res.body);
-      console.log("Received raw data:", rawData); // Виводимо дані вейФорПей про оплату користувача
+      const rawData = req.body;
+
+      console.log("Received raw data:", rawData);
 
       res.status(200).send({
         orderReference: "b70f69a9-0e6d-4439-b63d-100aa4b1adb2",
