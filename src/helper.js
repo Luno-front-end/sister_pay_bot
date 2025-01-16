@@ -36,8 +36,8 @@ const addInfoUserDB = (
   lastName,
   userName,
   order_desc,
-  amount
-  // order_id,
+  amount,
+  order_id
   // payId,
   // title
 ) => {
