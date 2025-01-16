@@ -134,6 +134,7 @@ const updateUserForPay = async (
   mail,
   orderId,
   status,
+  phone,
   timePay,
   amount,
   payment_system,
@@ -145,6 +146,7 @@ const updateUserForPay = async (
     console.log("====================================");
     console.log("user", user);
     console.log("====================================");
+
     if (user.length === 1) {
       console.log("yes");
       SubsUsersSchema.updateOne(
@@ -154,6 +156,7 @@ const updateUserForPay = async (
             payment: {
               sender_email: mail,
               order_id: orderId,
+              phone: phone,
               order_status: status,
               datePay: timePay,
               dateEnd: dateSubs().dateEndOne,

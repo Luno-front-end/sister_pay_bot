@@ -79,6 +79,7 @@ const server = () => {
         });
         res.end();
       }
+
       if (jsonData.transactionStatus === "InProcessing") {
         await updateUserForPay(
           null,
