@@ -78,9 +78,7 @@ const server = () => {
           ),
         });
         res.end();
-      }
-
-      if (jsonData.transactionStatus === "InProcessing") {
+      } else {
         await updateUserForPay(
           null,
           jsonData.orderReference,
@@ -104,66 +102,10 @@ const server = () => {
         });
         res.end();
       }
-      if (jsonData.transactionStatus === "Refunded") {
-        await updateUserForPay(
-          null,
-          jsonData.orderReference,
-          jsonData.transactionStatus.toLowerCase(),
-          null,
-          timeEditPay(jsonData.createdDate),
-          null,
-          null,
-          null
-        );
-
-        res.status(200).send({
-          orderReference: jsonData?.orderReference,
-          status: "accept",
-          time: jsonData?.createdDate,
-          signature: generateSignatureRes(
-            jsonData?.orderReference,
-            "accept",
-            jsonData?.createdDate
-          ),
-        });
-        res.end();
-      }
-
-      // res.status(200).send({
-      //   orderReference: jsonData?.orderReference,
-      //   status: "accept",
-      //   time: jsonData?.createdDate,
-      //   signature: generateSignatureRes(
-      //     jsonData?.orderReference,
-      //     "accept",
-      //     jsonData?.createdDate
-      //   ),
-      // });
     } catch (err) {
       console.error("Error parsing JSON:", err);
       res.status(400).send("Invalid JSON");
     }
-
-    // if (response.order_status === "declined") {
-    //   await updateUserStatusPay(
-    //     response.payment_id,
-    //     response.order_status,
-    //     response.payment_system,
-    //     response.card_type
-    //   );
-    //   res.status(500).send("HTTP 500 OK");
-    //   res.end();
-    // }
-    // if (response.order_status === "processing") {
-    //   await updateUserStatusPay(
-    //     response.payment_id,
-    //     response.order_status,
-    //     response.payment_system,
-    //     response.card_type
-    //   );
-    //   res.status(500).send("HTTP 500 OK");
-    //   res.end();
-    // }
   });
 
   app.listen(process.env.PORT, "127.0.0.1", () => {

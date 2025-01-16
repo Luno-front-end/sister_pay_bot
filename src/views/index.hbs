@@ -24,7 +24,19 @@
                 <span class="mar">Пошта:</span>
                 <span
                   class="information-el mail"
-                >{{payment.sender_email}}</span>
+                > {{#if payment.sender_email}}
+                {{payment.sender_email}}
+                {{else}} невідомо {{/if}}</span>
+              </li>
+              <li class="information-item">
+                <span class="mar">Номер телефону:</span>
+                <span
+                  class="information-el mail"
+                >
+                {{#if payment.phone}}
+                {{payment.phone}}
+                {{else}} невідомо {{/if}}
+                </span>
               </li>
             </ul>
           </div>

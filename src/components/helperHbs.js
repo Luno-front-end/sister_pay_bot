@@ -5,7 +5,7 @@ const getStatus = (status) => {
     return "Не оплачено";
   } else if (status === "declined") {
     return "ВІДХИЛЕНО";
-  } else if (status === "processing") {
+  } else if (status === "inprocessing") {
     return "Платіж відправлений, але не отриманий (очікується підтвердження)";
   } else if (status === "deleted") {
     return "Відписався";
@@ -20,7 +20,7 @@ const getColorStatus = (status) => {
     return "user-list-null";
   } else if (status === "declined") {
     return "user-list-declined";
-  } else if (status === "processing") {
+  } else if (status === "inprocessing") {
     return "user-list-processing";
   } else if (status === "deleted") {
     return "user-list-dell";
