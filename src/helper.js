@@ -125,10 +125,8 @@ const timePay = () => {
 // };
 
 const timeEditPay = (res) => {
-  const time = res.toString();
-  // const time = "18.01.2023 21:59:37";
-  const timeEdit = time.replace(/[.]/g, "/").slice(0, 10);
-  return timeEdit;
+  const date = new Date(res * 1000);
+  return date.toLocaleString();
 };
 // const timeEditPay = (res) => {
 //   // const time = res.toString();

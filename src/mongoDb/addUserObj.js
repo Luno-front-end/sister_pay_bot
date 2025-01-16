@@ -7,11 +7,10 @@ const userInfo = {
   subscribe: null,
   order_id: null,
   order_desc: null,
-  payment_id: null,
-  title: null,
   deleteDate: null,
   addDate: null,
   payment: {
+    phone: null,
     amount: null,
     sender_email: null,
     order_id: null,

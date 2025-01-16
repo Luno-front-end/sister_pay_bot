@@ -9,10 +9,10 @@ const subsUsers = new Schema({
   subscribe: Number,
   order_id: String,
   order_desc: String,
-  payment_id: Number,
   deleteDate: String,
   addDate: String,
   payment: {
+    phone: String,
     sender_email: String,
     order_id: String,
     order_status: String,

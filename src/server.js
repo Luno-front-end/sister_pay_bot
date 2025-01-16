@@ -53,20 +53,7 @@ const server = () => {
       const rawData = req.body;
       const jsonData = JSON.parse(rawData);
 
-      console.log("Received raw data:", jsonData);
-
-      console.log("====================================");
-      console.log({
-        orderReference: jsonData?.orderReference,
-        status: "accept",
-        time: jsonData?.createdDate,
-        signature: generateSignatureRes(
-          jsonData?.orderReference,
-          "accept",
-          jsonData?.createdDate
-        ),
-      });
-      console.log("====================================");
+      // console.log("Received raw data:", jsonData);
 
       res.status(200).send({
         orderReference: jsonData?.orderReference,
@@ -83,22 +70,30 @@ const server = () => {
       res.status(400).send("Invalid JSON");
     }
 
-    // if (response.order_status === "approved") {
-    //   await updateUserForPay(
-    //     response.payment_id,
-    //     response.sender_email,
-    //     response.order_id,
-    //     response.order_status,
-    //     response.rectoken,
-    //     timeEditPay(response.order_time),
-    //     response.amount,
-    //     response.payment_system,
-    //     response.card_type
-    //   );
+    if (response.order_status === "Approved") {
+      await updateUserForPay(
+        jsonData.email,
+        jsonData.orderReference,
+        jsonData.transactionStatus,
+        jsonData.phone,
+        timeEditPay(jsonData.createdDate),
+        jsonData.amount,
+        jsonData.paymentSystem,
+        jsonData.cardType
+      );
 
-    //   res.status(200).send("HTTP 200 OK");
-    //   res.end();
-    // }
+      res.status(200).send({
+        orderReference: jsonData?.orderReference,
+        status: "accept",
+        time: jsonData?.createdDate,
+        signature: generateSignatureRes(
+          jsonData?.orderReference,
+          "accept",
+          jsonData?.createdDate
+        ),
+      });
+      res.end();
+    }
     // if (response.order_status === "declined") {
     //   await updateUserStatusPay(
     //     response.payment_id,

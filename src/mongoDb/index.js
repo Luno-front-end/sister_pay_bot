@@ -132,11 +132,9 @@ const getUserForOrderId = async (order_id, secure) => {
 };
 
 const updateUserForPay = async (
-  pay_id,
   mail,
   orderId,
   status,
-  rectoken,
   timePay,
   amount,
   payment_system,
@@ -144,10 +142,9 @@ const updateUserForPay = async (
 ) => {
   try {
     connectDb();
-    const user = await getOneUsersByPayId(pay_id);
-    pay_id === user[0].payment_id
+    const user = await getOneUsersByPayId(orderId);
+    user.length === 1
       ? SubsUsersSchema.updateOne(
-          { payment_id: pay_id },
           {
             $set: {
               deleteDate: null,
@@ -155,7 +152,6 @@ const updateUserForPay = async (
                 sender_email: mail,
                 order_id: orderId,
                 order_status: status,
-                rectoken: rectoken,
                 datePay: timePay,
                 dateEnd: dateSubs().dateEndOne,
                 amount: Number(amount),
@@ -213,9 +209,9 @@ const getAllUsers = async () => {
 
   return allUsers;
 };
-const getOneUsersByPayId = async (pay_id) => {
+const getOneUsersByPayId = async (orderId) => {
   connectDb();
-  const user = await SubsUsersSchema.find({ payment_id: pay_id });
+  const user = await SubsUsersSchema.find({ order_id: orderId });
   connectDb().on("error", console.log).on("disconnect", connectDb);
   return user;
 };
