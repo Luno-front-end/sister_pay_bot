@@ -30,7 +30,6 @@ const connectDb = () => {
 
 const createUser = () => {
   connectDb();
-  console.log(userInfo);
 
   const addUsers = new SubsUsersSchema(userInfo);
   addUsers.save((err, post) => {
