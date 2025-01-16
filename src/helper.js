@@ -47,8 +47,8 @@ const addInfoUserDB = (
   userInfo.user_id = userId;
   userInfo.order_desc = order_desc;
   userInfo.pay = amount;
+  userInfo.order_id = order_id;
   // userInfo.subscribe = subscribe;
-  // userInfo.order_id = order_id;
   // userInfo.payment_id = payId;
   // userInfo.order_desc = title;
 };

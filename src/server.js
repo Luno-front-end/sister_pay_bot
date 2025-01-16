@@ -56,9 +56,54 @@ const server = () => {
       console.log("Received raw data:", jsonData);
 
       if (jsonData.transactionStatus === "Approved") {
-        console.log("====================================");
-        console.log("TEEST");
-        console.log("====================================");
+        await updateUserForPay(
+          jsonData.email,
+          jsonData.orderReference,
+          jsonData.transactionStatus.toLowerCase(),
+          jsonData.phone,
+          timeEditPay(jsonData.createdDate),
+          jsonData.amount,
+          jsonData.paymentSystem,
+          jsonData.cardType
+        );
+
+        res.status(200).send({
+          orderReference: jsonData?.orderReference,
+          status: "accept",
+          time: jsonData?.createdDate,
+          signature: generateSignatureRes(
+            jsonData?.orderReference,
+            "accept",
+            jsonData?.createdDate
+          ),
+        });
+        res.end();
+      }
+      if (jsonData.transactionStatus === "InProcessing") {
+        await updateUserForPay(
+          jsonData.email,
+          jsonData.orderReference,
+          jsonData.transactionStatus.toLowerCase(),
+          jsonData.phone,
+          timeEditPay(jsonData.createdDate),
+          jsonData.amount,
+          jsonData.paymentSystem,
+          jsonData.cardType
+        );
+
+        res.status(200).send({
+          orderReference: jsonData?.orderReference,
+          status: "accept",
+          time: jsonData?.createdDate,
+          signature: generateSignatureRes(
+            jsonData?.orderReference,
+            "accept",
+            jsonData?.createdDate
+          ),
+        });
+        res.end();
+      }
+      if (jsonData.transactionStatus === "Refunded") {
         await updateUserForPay(
           jsonData.email,
           jsonData.orderReference,
