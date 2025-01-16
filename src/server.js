@@ -1,6 +1,7 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const { generateSignatureRes } = require("./payment/sha");
 
 const {
   updateUserForPay,
@@ -55,10 +56,10 @@ const server = () => {
       console.log("Received raw data:", jsonData);
 
       res.status(200).send({
-        orderReference: "b70f69a9-0e6d-4439-b63d-100aa4b1adb2",
+        orderReference: jsonData.orderReference,
         status: "accept",
-        time: 1736963637,
-        signature: "1c1ff8236226b6c4a626e6231cf99d2c",
+        time: jsonData.createdDate,
+        signature: generateSignatureRes(),
       });
     } catch (err) {
       console.error("Error parsing JSON:", err);

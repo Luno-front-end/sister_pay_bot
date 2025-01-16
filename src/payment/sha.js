@@ -25,6 +25,16 @@ const generateSignature = (data) => {
     .update(dataToSign, "utf8")
     .digest("hex");
 };
+const generateSignatureRes = (data) => {
+  const dataToSign = [data.orderReference, data.status, data.time].join(";");
+
+  console.log("dataToSign", dataToSign);
+
+  return crypto
+    .createHmac("md5", process.env.SECRET_KEY)
+    .update(dataToSign, "utf8")
+    .digest("hex");
+};
 
 const createShaRes = () => {
   const shaKey = sha1("");
@@ -44,4 +54,9 @@ const createShaRecurring = () => {
   return shaKey;
 };
 
-module.exports = { generateSignature, createShaRes, createShaRecurring };
+module.exports = {
+  generateSignature,
+  generateSignatureRes,
+  createShaRes,
+  createShaRecurring,
+};
