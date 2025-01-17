@@ -162,6 +162,7 @@ const updateUserForPay = async (
       console.log("====================================");
       console.log("yes");
       SubsUsersSchema.updateOne(
+        { order_id: orderId },
         {
           $set: {
             deleteDate: null,
