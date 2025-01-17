@@ -151,7 +151,15 @@ const updateUserForPay = async (
     console.log("user", user);
     console.log("====================================");
 
-    if (user.length === 1) {
+    console.log("===============DO====================");
+    console.log(user[0].order_id === orderId);
+    console.log(orderId);
+    console.log("====================================");
+    if (user[0].order_id === orderId) {
+      console.log("==================IN==================");
+      console.log(user[0].order_id === orderId);
+      console.log(orderId);
+      console.log("====================================");
       console.log("yes");
       SubsUsersSchema.updateOne(
         {

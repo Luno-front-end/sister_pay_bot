@@ -71,11 +71,11 @@ const server = () => {
           orderReference: jsonData?.orderReference,
           status: "accept",
           time: jsonData?.createdDate,
-          signature: generateSignatureRes(
-            jsonData?.orderReference,
-            "accept",
-            jsonData?.createdDate
-          ),
+          signature: generateSignatureRes({
+            orderReference: jsonData?.orderReference,
+            status: "accept",
+            time: jsonData?.createdDate,
+          }),
         });
         res.end();
       } else {
@@ -94,11 +94,11 @@ const server = () => {
           orderReference: jsonData?.orderReference,
           status: "accept",
           time: jsonData?.createdDate,
-          signature: generateSignatureRes(
-            jsonData?.orderReference,
-            "accept",
-            jsonData?.createdDate
-          ),
+          signature: generateSignatureRes({
+            orderReference: jsonData?.orderReference,
+            status: "accept",
+            time: jsonData?.createdDate,
+          }),
         });
         res.end();
       }
