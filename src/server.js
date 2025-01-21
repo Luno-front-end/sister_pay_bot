@@ -78,7 +78,9 @@ const server = (bot) => {
       throw error;
     }
   };
-
+  console.log("====================================");
+  console.log(process.env.LIVE_LINK_CHANNEL);
+  console.log("====================================");
   // Відправка користувачу повідомлення з унікальним посиланням
   const sendInviteToUser = async (userId, message, statusPay) => {
     try {
@@ -107,10 +109,7 @@ const server = (bot) => {
           },
         });
       } else {
-        await bot.sendMessage(
-          userId,
-          "Платіж не успішний. Зверніться до адміністратора, або  повторіть платіж"
-        );
+        await bot.sendMessage(userId, message);
       }
     } catch (error) {
       console.error(
@@ -204,7 +203,6 @@ const server = (bot) => {
 
       // const userId = "527139022"; // ID користувача, якому потрібно відправити посилання
       // const userId = "382298066"; // ID користувача, якому потрібно відправити посилання
-      sendInviteToUser(user.ueser_id, text.successPayment, true);
       if (jsonData.transactionStatus === "Approved") {
         await updateUserForPay(
           jsonData.email,
@@ -216,6 +214,8 @@ const server = (bot) => {
           jsonData.paymentSystem,
           jsonData.cardType
         );
+
+        sendInviteToUser(user.user_id, text.successPayment, true);
 
         res.status(200).send({
           orderReference: jsonData?.orderReference,
@@ -240,9 +240,9 @@ const server = (bot) => {
           null
         );
 
-        sendMessageToUser(
+        sendInviteToUser(
           user.user_id,
-          `Оплата відмовлена, статус оплати ${jsonData.transactionStatus}`,
+          `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
           false
         );
 
@@ -258,8 +258,6 @@ const server = (bot) => {
         });
         res.end();
       }
-
-      res.send("dajlwhdk");
     } catch (err) {
       console.error("Error parsing JSON:", err);
       res.status(400).send("Invalid JSON");
