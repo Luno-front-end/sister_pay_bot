@@ -185,7 +185,8 @@ const server = (bot) => {
 
       // sendMessageToUser("382298066", text.successPayment, true);
 
-      const userId = "382298066"; // ID користувача, якому потрібно відправити посилання
+      const userId = "527139022"; // ID користувача, якому потрібно відправити посилання
+      // const userId = "382298066"; // ID користувача, якому потрібно відправити посилання
       sendInviteToUser(userId);
       // if (jsonData.transactionStatus === "Approved") {
       //   await updateUserForPay(
