@@ -42,23 +42,26 @@ const server = (bot) => {
   app.use(express.static(__dirname + "/views/public"));
 
   const sendMessageToUser = async (userId, message, statusPay) => {
+    await bot.sendMessage(chat_id, text.caption_two, {
+      ...keyboardDefault,
+    });
+
     try {
-      await bot.sendMessage(
-        userId,
-        message,
-        statusPay && {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "Перейти в канал", // Текст на кнопці
-                  url: channelInviteLink, // Посилання на канал
-                },
+      statusPay
+        ? await bot.sendMessage(userId, message, {
+            reply_markup: {
+              resize_keyboard: true,
+              inline_keyboard: [
+                [
+                  {
+                    text: "Перейти в канал", // Текст на кнопці
+                    url: channelInviteLink, // Посилання на канал
+                  },
+                ],
               ],
-            ],
-          },
-        }
-      );
+            },
+          })
+        : await bot.sendMessage(userId, message);
       console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
     } catch (error) {
       console.error(
