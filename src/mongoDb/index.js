@@ -140,7 +140,7 @@ const updateUserForPay = async (
           $set: {
             deleteDate: null,
             old_order_id: orderId,
-            old_pay: pay,
+            old_pay: amount,
             payment: {
               sender_email: mail,
               order_id: orderId,

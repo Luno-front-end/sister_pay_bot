@@ -41,20 +41,24 @@ const server = (bot) => {
 
   app.use(express.static(__dirname + "/views/public"));
 
-  const sendMessageToUser = async (userId, message) => {
+  const sendMessageToUser = async (userId, message, statusPay) => {
     try {
-      await bot.sendMessage(userId, message, {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Перейти в канал", // Текст на кнопці
-                url: channelInviteLink, // Посилання на канал
-              },
+      await bot.sendMessage(
+        userId,
+        message,
+        statusPay && {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Перейти в канал", // Текст на кнопці
+                  url: channelInviteLink, // Посилання на канал
+                },
+              ],
             ],
-          ],
-        },
-      });
+          },
+        }
+      );
       console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
     } catch (error) {
       console.error(
@@ -86,6 +90,8 @@ const server = (bot) => {
 
       console.log("Received raw data:", jsonData);
 
+      const user = getOneUsersByPayId(jsonData.orderReference);
+
       if (jsonData.transactionStatus === "Approved") {
         await updateUserForPay(
           jsonData.email,
@@ -98,9 +104,7 @@ const server = (bot) => {
           jsonData.cardType
         );
 
-        const user = getOneUsersByPayId(jsonData.orderReference);
-
-        sendMessageToUser(user.user_id, text.successPayment);
+        sendMessageToUser(user.user_id, text.successPayment, true);
 
         res.status(200).send({
           orderReference: jsonData?.orderReference,
@@ -123,6 +127,12 @@ const server = (bot) => {
           null,
           null,
           null
+        );
+
+        sendMessageToUser(
+          user.user_id,
+          `Оплата відмовлена, статус оплати ${jsonData.transactionStatus}`,
+          false
         );
 
         res.status(200).send({
