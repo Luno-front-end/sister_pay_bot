@@ -176,6 +176,21 @@ const server = (bot) => {
   //   }
   // };
 
+  app.get("/users", async (req, res) => {
+    const allUsers = await getAllUsers();
+    res.render(__dirname + "/views/index", {
+      allUsers: allUsers,
+    });
+  });
+  app.all("/good", async (req, res) => {
+    const response = await req.body;
+
+    res.redirect(process.env.URL_GROOP_CONNECT);
+    // res.status(200).send("HTTP 200 OK");
+
+    res.end();
+  });
+
   app.get("/statusPay", async (req, res) => {
     try {
       const rawData = req.body;
