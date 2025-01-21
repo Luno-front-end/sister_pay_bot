@@ -5,8 +5,6 @@ const { generateSignatureRes } = require("./payment/sha");
 const { text } = require("./constantsUA");
 // const TelegramBot = require("node-telegram-bot-api");
 
-const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
-
 const {
   updateUserForPay,
   getAllUsers,
@@ -20,6 +18,7 @@ const app = express();
 
 require("dotenv").config();
 
+const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
 // app.use(express.json());
 app.use(bodyParser.text({ type: "*/*" }));
 
@@ -41,111 +40,208 @@ const server = (bot) => {
 
   app.use(express.static(__dirname + "/views/public"));
 
-  const sendMessageToUser = async (userId, message, statusPay) => {
+  // const sendMessageToUser = async (userId, message, statusPay) => {
+  //   try {
+  //     statusPay
+  //       ? await bot.sendMessage(userId, message, {
+  //           reply_markup: {
+  //             inline_keyboard: [
+  //               [
+  //                 {
+  //                   text: "Перейти в канал", // Текст на кнопці
+  //                   url: channelInviteLink, // Посилання на канал
+  //                 },
+  //               ],
+  //             ],
+  //           },
+  //         })
+  //       : await bot.sendMessage(userId, message);
+  //     console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
+  //   } catch (error) {
+  //     console.error(
+  //       `Помилка при відправці повідомлення користувачу ${userId}:`,
+  //       error.message
+  //     );
+  //   }
+  // };
+  const channelId = "-1002465535663";
+
+  const createInviteLink = async (chatId, expireDate, memberLimit) => {
     try {
-      statusPay
-        ? await bot.sendMessage(userId, message, {
-            reply_markup: {
-              resize_keyboard: true,
-              inline_keyboard: [
-                [
-                  {
-                    text: "Перейти в канал", // Текст на кнопці
-                    url: channelInviteLink, // Посилання на канал
-                  },
-                ],
-              ],
-            },
-          })
-        : await bot.sendMessage(userId, message);
-      console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
+      const inviteLink = await bot.createChatInviteLink(chatId, {
+        expire_date: expireDate, // Таймер на закінчення посилання
+        member_limit: memberLimit, // Ліміт використань (наприклад, 1)
+      });
+      return inviteLink.invite_link;
+    } catch (error) {
+      console.error("Помилка при створенні інвайт-посилання:", error.message);
+      throw error;
+    }
+  };
+
+  // Відправка користувачу повідомлення з унікальним посиланням
+  const sendInviteToUser = async (userId) => {
+    try {
+      // Генерація інвайт-посилання (діє 1 година, ліміт 1 використання)
+      const expireDate = Math.floor(Date.now() / 1000) + 30; // Через 1 годину
+      // const expireDate = Math.floor(Date.now() / 1000) + 3600; // Через 1 годину
+      const memberLimit = 1;
+
+      const inviteLink = await createInviteLink(
+        channelId,
+        expireDate,
+        memberLimit
+      );
+
+      // Надсилання повідомлення з кнопкою
+      await bot.sendMessage(userId, "Ваше унікальне посилання на канал:", {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Перейти в канал", // Текст кнопки
+                url: inviteLink, // Унікальне посилання
+              },
+            ],
+          ],
+        },
+      });
+
+      console.log(
+        `Посилання успішно відправлено користувачу ${userId}: ${inviteLink}`
+      );
     } catch (error) {
       console.error(
-        `Помилка при відправці повідомлення користувачу ${userId}:`,
+        `Помилка при надсиланні посилання користувачу ${userId}:`,
         error.message
       );
     }
   };
 
-  app.get("/users", async (req, res) => {
-    const allUsers = await getAllUsers();
-    res.render(__dirname + "/views/index", {
-      allUsers: allUsers,
-    });
-  });
-  app.all("/good", async (req, res) => {
-    const response = await req.body;
+  // Приклад виклику функції
 
-    res.redirect(process.env.URL_GROOP_CONNECT);
-    // res.status(200).send("HTTP 200 OK");
+  // const sendMessageToUser = async (userId, message, statusPay) => {
+  //   try {
+  //     if (statusPay) {
+  //       console.log("====================================");
+  //       console.log(channelInviteLink);
+  //       console.log("====================================");
 
-    res.end();
-  });
+  //       // const channelInviteLink = "https://t.me/+your_channel_invite_code"; // Замість цього додайте своє посилання
+  //       await bot.sendMessage(userId, message, {
+  //         reply_markup: {
+  //           inline_keyboard: [
+  //             [
+  //               {
+  //                 text: "Перейти в канал", // Текст кнопки
+  //                 url: channelInviteLink, // Валідне посилання
+  //               },
+  //             ],
+  //           ],
+  //         },
+  //       });
 
-  app.post("/statusPay", async (req, res) => {
+  //       bot.on("callback_query", async (callbackQuery) => {
+  //         const data = callbackQuery.data;
+  //         const messageId = callbackQuery.message.message_id;
+
+  //         if (data === "go_to_channel") {
+  //           // Вилучення кнопок з повідомлення після натискання
+  //           await bot.editMessageReplyMarkup(
+  //             { inline_keyboard: [] }, // Видалення всіх кнопок
+  //             {
+  //               chat_id: callbackQuery.message.chat.id,
+  //               message_id: messageId,
+  //             }
+  //           );
+  //         }
+
+  //         // Відповісти на callback_query, щоб прибрати індикатор завантаження кнопки
+  //         await bot.answerCallbackQuery(callbackQuery.id, {
+  //           text: "Перехід до каналу...",
+  //         });
+  //       });
+  //     } else {
+  //       await bot.sendMessage(userId, message);
+  //     }
+
+  //     console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
+  //   } catch (error) {
+  //     console.error(
+  //       `Помилка при відправці повідомлення користувачу ${userId}:`,
+  //       error.message
+  //     );
+  //   }
+  // };
+
+  app.get("/statusPay", async (req, res) => {
     try {
-      const rawData = req.body;
-      const jsonData = JSON.parse(rawData);
+      // const rawData = req.body;
+      // const jsonData = JSON.parse(rawData);
 
-      console.log("Received raw data:", jsonData);
+      // console.log("Received raw data:", jsonData);
 
-      const user = getOneUsersByPayId(jsonData.orderReference);
+      // const user = getOneUsersByPayId(jsonData.orderReference);
 
-      if (jsonData.transactionStatus === "Approved") {
-        await updateUserForPay(
-          jsonData.email,
-          jsonData.orderReference,
-          jsonData.transactionStatus.toLowerCase(),
-          jsonData.phone,
-          timeEditPay(jsonData.createdDate),
-          jsonData.amount,
-          jsonData.paymentSystem,
-          jsonData.cardType
-        );
+      // sendMessageToUser("382298066", text.successPayment, true);
 
-        sendMessageToUser(user.user_id, text.successPayment, true);
+      const userId = "382298066"; // ID користувача, якому потрібно відправити посилання
+      sendInviteToUser(userId);
+      // if (jsonData.transactionStatus === "Approved") {
+      //   await updateUserForPay(
+      //     jsonData.email,
+      //     jsonData.orderReference,
+      //     jsonData.transactionStatus.toLowerCase(),
+      //     jsonData.phone,
+      //     timeEditPay(jsonData.createdDate),
+      //     jsonData.amount,
+      //     jsonData.paymentSystem,
+      //     jsonData.cardType
+      //   );
 
-        res.status(200).send({
-          orderReference: jsonData?.orderReference,
-          status: "accept",
-          time: jsonData?.createdDate,
-          signature: generateSignatureRes({
-            orderReference: jsonData?.orderReference,
-            status: "accept",
-            time: jsonData?.createdDate,
-          }),
-        });
-        res.end();
-      } else {
-        await updateUserForPay(
-          null,
-          jsonData.orderReference,
-          jsonData.transactionStatus.toLowerCase(),
-          null,
-          timeEditPay(jsonData.createdDate),
-          null,
-          null,
-          null
-        );
+      //   res.status(200).send({
+      //     orderReference: jsonData?.orderReference,
+      //     status: "accept",
+      //     time: jsonData?.createdDate,
+      //     signature: generateSignatureRes({
+      //       orderReference: jsonData?.orderReference,
+      //       status: "accept",
+      //       time: jsonData?.createdDate,
+      //     }),
+      //   });
+      //   res.end();
+      // } else {
+      //   await updateUserForPay(
+      //     null,
+      //     jsonData.orderReference,
+      //     jsonData.transactionStatus.toLowerCase(),
+      //     null,
+      //     timeEditPay(jsonData.createdDate),
+      //     null,
+      //     null,
+      //     null
+      //   );
 
-        sendMessageToUser(
-          user.user_id,
-          `Оплата відмовлена, статус оплати ${jsonData.transactionStatus}`,
-          false
-        );
+      //   sendMessageToUser(
+      //     user.user_id,
+      //     `Оплата відмовлена, статус оплати ${jsonData.transactionStatus}`,
+      //     false
+      //   );
 
-        res.status(200).send({
-          orderReference: jsonData?.orderReference,
-          status: "accept",
-          time: jsonData?.createdDate,
-          signature: generateSignatureRes({
-            orderReference: jsonData?.orderReference,
-            status: "accept",
-            time: jsonData?.createdDate,
-          }),
-        });
-        res.end();
-      }
+      //   res.status(200).send({
+      //     orderReference: jsonData?.orderReference,
+      //     status: "accept",
+      //     time: jsonData?.createdDate,
+      //     signature: generateSignatureRes({
+      //       orderReference: jsonData?.orderReference,
+      //       status: "accept",
+      //       time: jsonData?.createdDate,
+      //     }),
+      //   });
+      //   res.end();
+      // }
+
+      res.send("dajlwhdk");
     } catch (err) {
       console.error("Error parsing JSON:", err);
       res.status(400).send("Invalid JSON");
