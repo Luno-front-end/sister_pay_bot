@@ -64,7 +64,8 @@ const server = (bot) => {
   //     );
   //   }
   // };
-  const channelId = "-1002465535663";
+  const channelId = process.env.CHANNEL_ID;
+  // const channelId = "-1002465535663";
 
   const createInviteLink = async (chatId, expireDate, memberLimit) => {
     try {
@@ -197,7 +198,12 @@ const server = (bot) => {
 
       console.log("Received raw data:", jsonData);
 
-      const user = getOneUsersByPayId(jsonData.orderReference);
+      const user = await getOneUsersByPayId(jsonData.orderReference);
+
+      console.log("====================================");
+      console.log(user);
+      console.log(jsonData.orderReference);
+      console.log("====================================");
 
       // sendMessageToUser("382298066", text.successPayment, true);
 
@@ -215,7 +221,7 @@ const server = (bot) => {
           jsonData.cardType
         );
 
-        sendInviteToUser(user.user_id, text.successPayment, true);
+        await sendInviteToUser(user.user_id, text.successPayment, true);
 
         res.status(200).send({
           orderReference: jsonData?.orderReference,
@@ -240,7 +246,7 @@ const server = (bot) => {
           null
         );
 
-        sendInviteToUser(
+        await sendInviteToUser(
           user.user_id,
           `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
           false
