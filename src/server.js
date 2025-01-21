@@ -78,14 +78,14 @@ const server = (bot) => {
       throw error;
     }
   };
-  console.log("====================================");
-  console.log(process.env.LIVE_LINK_CHANNEL);
-  console.log("====================================");
+  // console.log("====================================");
+  // console.log(process.env.LIVE_LINK_CHANNEL);
+  // console.log("====================================");
   // Відправка користувачу повідомлення з унікальним посиланням
   const sendInviteToUser = async (userId, message, statusPay) => {
     try {
       // Генерація інвайт-посилання (діє 1 година, ліміт 1 використання)
-      const expireDate = process.env.LIVE_LINK_CHANNEL; // Через 1 годину
+      const expireDate = Math.floor(Date.now() / 1000) + 900; // Через 15 хв
       // const expireDate = Math.floor(Date.now() / 1000) + 3600; // Через 1 годину
       const memberLimit = 1;
 
