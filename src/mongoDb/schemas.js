@@ -6,6 +6,8 @@ const subsUsers = new Schema({
   username: String,
   user_id: Number,
   pay: Number,
+  old_pay: Number,
+  old_order_id: String,
   order_id: String,
   order_desc: String,
   deleteDate: String,

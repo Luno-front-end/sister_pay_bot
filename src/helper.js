@@ -18,7 +18,6 @@ const dateSubs = () => {
   const dateOne = oneM.slice(3, 5);
   const yearhOne = oneM.slice(6, 10);
   const date = {
-    // datePay: moment().format("L"),
     dateEndOne: `${dateOne}/${monthOne}/${yearhOne}`,
     dateEndTwo: `${dateSix}/${monthSix}/${yearhSix}`,
   };
@@ -38,11 +37,7 @@ const addInfoUserDB = (
   order_desc,
   amount,
   order_id
-  // payId,
-  // title
 ) => {
-  console.log("order_id", order_id);
-
   userInfo.first_name = firstName;
   userInfo.last_name = lastName;
   userInfo.username = userName;
@@ -50,9 +45,8 @@ const addInfoUserDB = (
   userInfo.order_desc = order_desc;
   userInfo.pay = amount;
   userInfo.order_id = order_id;
-  // userInfo.subscribe = subscribe;
-  // userInfo.payment_id = payId;
-  // userInfo.order_desc = title;
+  userInfo.old_pay = amount;
+  userInfo.old_order_id = order_id;
 };
 
 const paymentStatus = (mail, orderId, status, rectoken, amount) => {
@@ -95,53 +89,13 @@ const timePay = () => {
   return `${day()}/${month()}/${year}`;
 };
 
-// const alertPrePay = () => {
-//   const date = new Date();
-//   const year = date.getFullYear();
-
-//   // const dayMilliseconds = 24 * 60 * 60 * 1000;
-//   const oneBackDey = 24 * 60 * 60 * 1000;
-//   const twoBackDey = 48 * 60 * 60 * 1000;
-
-//   // date.setTime(currentDate.getTime());s
-
-//   const month = () => {
-//     const month = date.getMonth() + 1;
-//     if (month < 10) {
-//       return `0${month}`;
-//     }
-//     return month;
-//   };
-
-//   const day = () => {
-//     const day = date.getDate();
-
-//     if (day < 10) {
-//       return `0${day}`;
-//     }
-
-//     return day;
-//   };
-//   const www = date.setTime(date.getTime()) - dayMilliseconds;
-//   const newDay = new Date(www);
-//   return `${day()}/${month()}/${year}`;
-// };
-
 const timeEditPay = (res) => {
   const date = new Date(res * 1000);
-  return date.toLocaleString();
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 };
-// const timeEditPay = (res) => {
-//   // const time = res.toString();
-//   const time = "18.01.2023 21:59:37";
-//   const timeEdit = time.slice(0, 10);
-
-//   const month = timeEdit.slice(0, 2);
-//   const date = timeEdit.slice(3, 5);
-//   const yearh = timeEdit.slice(6, 10);
-
-//   return `${month}/${date}/${yearh}`;
-// };
 
 const acceptedMySubscription = (subsUser) => {
   if (!subsUser[0]?.payment.order_id) {

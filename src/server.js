@@ -2,11 +2,16 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const { generateSignatureRes } = require("./payment/sha");
+const { text } = require("./constantsUA");
+// const TelegramBot = require("node-telegram-bot-api");
+
+const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
 
 const {
   updateUserForPay,
   getAllUsers,
   updateUserStatusPay,
+  getOneUsersByPayId,
 } = require("./mongoDb/index");
 const { timeEditPay } = require("./helper");
 const { getStatus, getColorStatus } = require("./components/helperHbs");
@@ -18,7 +23,10 @@ require("dotenv").config();
 // app.use(express.json());
 app.use(bodyParser.text({ type: "*/*" }));
 
-const server = () => {
+// const token = process.env.BOT_TOKEN;
+// const bot = new TelegramBot(token, { polling: true });
+
+const server = (bot) => {
   const hbs = exphbs.create({
     defaultLayout: "main",
     extname: "hbs",
@@ -32,6 +40,29 @@ const server = () => {
   app.set("views", "./views");
 
   app.use(express.static(__dirname + "/views/public"));
+
+  const sendMessageToUser = async (userId, message) => {
+    try {
+      await bot.sendMessage(userId, message, {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Перейти в канал", // Текст на кнопці
+                url: channelInviteLink, // Посилання на канал
+              },
+            ],
+          ],
+        },
+      });
+      console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
+    } catch (error) {
+      console.error(
+        `Помилка при відправці повідомлення користувачу ${userId}:`,
+        error.message
+      );
+    }
+  };
 
   app.get("/users", async (req, res) => {
     const allUsers = await getAllUsers();
@@ -66,6 +97,10 @@ const server = () => {
           jsonData.paymentSystem,
           jsonData.cardType
         );
+
+        const user = getOneUsersByPayId(jsonData.orderReference);
+
+        sendMessageToUser(user.user_id, text.successPayment);
 
         res.status(200).send({
           orderReference: jsonData?.orderReference,

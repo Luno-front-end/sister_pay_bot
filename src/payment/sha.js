@@ -18,8 +18,6 @@ const generateSignature = (data) => {
     ...data.productPrice,
   ].join(";");
 
-  console.log("dataToSign", dataToSign);
-
   return crypto
     .createHmac("md5", process.env.SECRET_KEY)
     .update(dataToSign, "utf8")
@@ -27,8 +25,6 @@ const generateSignature = (data) => {
 };
 const generateSignatureRes = (data) => {
   const dataToSign = [data.orderReference, data.status, data.time].join(";");
-
-  console.log("dataToSign", dataToSign);
 
   return crypto
     .createHmac("md5", process.env.SECRET_KEY)
@@ -38,9 +34,6 @@ const generateSignatureRes = (data) => {
 
 const createShaRes = () => {
   const shaKey = sha1("");
-  // const shaKey = sha1(
-  //   `${process.env.SECRET_KEY}|${process.env.MERCHANT_ID}|${requestData.request.order_id}`
-  // );
 
   return shaKey;
 };

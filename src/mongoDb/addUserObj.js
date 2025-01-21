@@ -5,6 +5,8 @@ const userInfo = {
   user_id: Number,
   pay: null,
   order_id: null,
+  old_pay: null,
+  old_order_id: null,
   order_desc: null,
   deleteDate: null,
   addDate: null,

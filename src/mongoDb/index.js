@@ -31,10 +31,6 @@ const connectDb = () => {
 const createUser = () => {
   connectDb();
 
-  console.log("====================================");
-  console.log(userInfo);
-  console.log("====================================");
-
   const addUsers = new SubsUsersSchema(userInfo);
   addUsers.save((err, post) => {
     if (err) {
@@ -91,26 +87,15 @@ const updateSecureOrderUser = (userId, signature, order_id, date) => {
   connectDb().on("error", console.log).on("disconnect", connectDb);
 };
 
-const updateUser = (
-  userId,
-  pay,
-  nameBtn,
-  order_id,
-  payment_id,
-  title,
-  lang
-) => {
+const updateUser = (userId, pay, order_id, productName) => {
   connectDb();
   SubsUsersSchema.updateOne(
     { user_id: userId },
     {
       $set: {
         pay: pay,
-        subscribe: 1,
         order_id,
-        payment_id,
-        order_desc: title,
-        lang: lang,
+        order_desc: productName,
       },
     },
     (err, result) => {
@@ -147,25 +132,15 @@ const updateUserForPay = async (
   try {
     connectDb();
     const user = await getOneUsersByPayId(orderId);
-    console.log("====================================");
-    console.log("user", user);
-    console.log("====================================");
 
-    console.log("===============DO====================");
-    console.log(user[0].order_id === orderId);
-    console.log(orderId);
-    console.log("====================================");
-    if (user[0].order_id === orderId) {
-      console.log("==================IN==================");
-      console.log(user[0].order_id === orderId);
-      console.log(orderId);
-      console.log("====================================");
-      console.log("yes");
+    if (user.length > 0 && user[0]?.order_id === orderId) {
       SubsUsersSchema.updateOne(
         { order_id: orderId },
         {
           $set: {
             deleteDate: null,
+            old_order_id: orderId,
+            old_pay: pay,
             payment: {
               sender_email: mail,
               order_id: orderId,
@@ -323,7 +298,7 @@ module.exports = {
   recurringPayResponseDB,
   updateUserStatusPay,
   updateUserLang,
-
+  getOneUsersByPayId,
   updateSecureOrderUser,
   updateUserPayInfo,
 };
