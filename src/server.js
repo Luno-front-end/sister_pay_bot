@@ -191,7 +191,7 @@ const server = (bot) => {
     res.end();
   });
 
-  app.get("/statusPay", async (req, res) => {
+  app.post("/statusPay", async (req, res) => {
     try {
       const rawData = req.body;
       const jsonData = JSON.parse(rawData);
