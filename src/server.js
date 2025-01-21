@@ -221,7 +221,7 @@ const server = (bot) => {
           jsonData.cardType
         );
 
-        await sendInviteToUser(user.user_id, text.successPayment, true);
+        await sendInviteToUser(user[0].user_id, text.successPayment, true);
 
         res.status(200).send({
           orderReference: jsonData?.orderReference,
@@ -247,7 +247,7 @@ const server = (bot) => {
         );
 
         await sendInviteToUser(
-          user.user_id,
+          user[0].user_id,
           `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
           false
         );
