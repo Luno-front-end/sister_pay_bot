@@ -42,10 +42,6 @@ const server = (bot) => {
   app.use(express.static(__dirname + "/views/public"));
 
   const sendMessageToUser = async (userId, message, statusPay) => {
-    await bot.sendMessage(chat_id, text.caption_two, {
-      ...keyboardDefault,
-    });
-
     try {
       statusPay
         ? await bot.sendMessage(userId, message, {
