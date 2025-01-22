@@ -40,30 +40,6 @@ const server = (bot) => {
 
   app.use(express.static(__dirname + "/views/public"));
 
-  // const sendMessageToUser = async (userId, message, statusPay) => {
-  //   try {
-  //     statusPay
-  //       ? await bot.sendMessage(userId, message, {
-  //           reply_markup: {
-  //             inline_keyboard: [
-  //               [
-  //                 {
-  //                   text: "Перейти в канал", // Текст на кнопці
-  //                   url: channelInviteLink, // Посилання на канал
-  //                 },
-  //               ],
-  //             ],
-  //           },
-  //         })
-  //       : await bot.sendMessage(userId, message);
-  //     console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
-  //   } catch (error) {
-  //     console.error(
-  //       `Помилка при відправці повідомлення користувачу ${userId}:`,
-  //       error.message
-  //     );
-  //   }
-  // };
   const channelId = process.env.CHANNEL_ID;
   // const channelId = "-1002465535663";
 
@@ -120,62 +96,6 @@ const server = (bot) => {
     }
   };
 
-  // Приклад виклику функції
-
-  // const sendMessageToUser = async (userId, message, statusPay) => {
-  //   try {
-  //     if (statusPay) {
-  //       console.log("====================================");
-  //       console.log(channelInviteLink);
-  //       console.log("====================================");
-
-  //       // const channelInviteLink = "https://t.me/+your_channel_invite_code"; // Замість цього додайте своє посилання
-  //       await bot.sendMessage(userId, message, {
-  //         reply_markup: {
-  //           inline_keyboard: [
-  //             [
-  //               {
-  //                 text: "Перейти в канал", // Текст кнопки
-  //                 url: channelInviteLink, // Валідне посилання
-  //               },
-  //             ],
-  //           ],
-  //         },
-  //       });
-
-  //       bot.on("callback_query", async (callbackQuery) => {
-  //         const data = callbackQuery.data;
-  //         const messageId = callbackQuery.message.message_id;
-
-  //         if (data === "go_to_channel") {
-  //           // Вилучення кнопок з повідомлення після натискання
-  //           await bot.editMessageReplyMarkup(
-  //             { inline_keyboard: [] }, // Видалення всіх кнопок
-  //             {
-  //               chat_id: callbackQuery.message.chat.id,
-  //               message_id: messageId,
-  //             }
-  //           );
-  //         }
-
-  //         // Відповісти на callback_query, щоб прибрати індикатор завантаження кнопки
-  //         await bot.answerCallbackQuery(callbackQuery.id, {
-  //           text: "Перехід до каналу...",
-  //         });
-  //       });
-  //     } else {
-  //       await bot.sendMessage(userId, message);
-  //     }
-
-  //     console.log(`Повідомлення успішно відправлено користувачу ${userId}`);
-  //   } catch (error) {
-  //     console.error(
-  //       `Помилка при відправці повідомлення користувачу ${userId}:`,
-  //       error.message
-  //     );
-  //   }
-  // };
-
   app.get("/users", async (req, res) => {
     const allUsers = await getAllUsers();
     res.render(__dirname + "/views/index", {
@@ -194,7 +114,8 @@ const server = (bot) => {
   app.post("/statusPay", async (req, res) => {
     try {
       const rawData = req.body;
-      const jsonData = JSON.parse(rawData);
+      const jsonData =
+        typeof rawData === "string" ? JSON.parse(rawData) : rawData;
 
       console.log("Received raw data:", jsonData);
 
@@ -204,6 +125,7 @@ const server = (bot) => {
       console.log(user);
       console.log(jsonData.orderReference);
       console.log("====================================");
+      // await sendInviteToUser(user[0].user_id, text.successPayment, true);
 
       // sendMessageToUser("382298066", text.successPayment, true);
 
@@ -221,8 +143,6 @@ const server = (bot) => {
           jsonData.cardType
         );
 
-        await sendInviteToUser(user[0].user_id, text.successPayment, true);
-
         res.status(200).send({
           orderReference: jsonData?.orderReference,
           status: "accept",
@@ -234,6 +154,7 @@ const server = (bot) => {
           }),
         });
         res.end();
+        await sendInviteToUser(user[0].user_id, text.successPayment, true);
       } else {
         await updateUserForPay(
           null,
@@ -246,12 +167,6 @@ const server = (bot) => {
           null
         );
 
-        await sendInviteToUser(
-          user[0].user_id,
-          `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
-          false
-        );
-
         res.status(200).send({
           orderReference: jsonData?.orderReference,
           status: "accept",
@@ -263,6 +178,11 @@ const server = (bot) => {
           }),
         });
         res.end();
+        await sendInviteToUser(
+          user[0].user_id,
+          `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
+          false
+        );
       }
     } catch (err) {
       console.error("Error parsing JSON:", err);
