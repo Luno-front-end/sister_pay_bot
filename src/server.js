@@ -154,7 +154,8 @@ const server = (bot) => {
           }),
         });
         res.end();
-        await sendInviteToUser(user[0].user_id, text.successPayment, true);
+        user.length > 0 &&
+          (await sendInviteToUser(user[0].user_id, text.successPayment, true));
       } else {
         await updateUserForPay(
           null,
@@ -178,11 +179,12 @@ const server = (bot) => {
           }),
         });
         res.end();
-        await sendInviteToUser(
-          user[0].user_id,
-          `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
-          false
-        );
+        user.length > 0 &&
+          (await sendInviteToUser(
+            user[0].user_id,
+            `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
+            false
+          ));
       }
     } catch (err) {
       console.error("Error parsing JSON:", err);
