@@ -125,6 +125,7 @@ bot.on("callback_query", async (query) => {
       requestData.productName = ["Підписка на місяць"];
       requestData.productPrice = [2];
       requestData.orderDate = time;
+      requestData.month = 1;
 
       const merchantSignature = generateSignature({
         merchantDomainName: requestData.merchantDomainName,
@@ -182,10 +183,13 @@ bot.on("callback_query", async (query) => {
       const orderIdGenerate = uuidv4();
 
       requestData.orderReference = orderIdGenerate;
-      requestData.amount = 3500;
+      requestData.amount = 3;
+      // requestData.amount = 3500;
       requestData.productName = ["Підписка на 3 місяці"];
-      requestData.productPrice = [3500];
+      requestData.productPrice = [3];
+      // requestData.productPrice = [3500];
       requestData.orderDate = time;
+      requestData.month = 3;
 
       const merchantSignature = generateSignature({
         merchantDomainName: requestData.merchantDomainName,

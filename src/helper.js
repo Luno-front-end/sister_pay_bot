@@ -8,11 +8,11 @@ const { request } = require("express");
 
 const dateSubs = () => {
   const oneM = moment().add(1, "month").calendar();
-  const sixM = moment().add(6, "month").calendar();
+  const threeM = moment().add(3, "month").calendar();
 
-  const monthSix = sixM.slice(0, 2);
-  const dateSix = sixM.slice(3, 5);
-  const yearhSix = sixM.slice(6, 10);
+  const monthSix = threeM.slice(0, 2);
+  const dateSix = threeM.slice(3, 5);
+  const yearhSix = threeM.slice(6, 10);
 
   const monthOne = oneM.slice(0, 2);
   const dateOne = oneM.slice(3, 5);

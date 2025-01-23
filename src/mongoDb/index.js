@@ -127,7 +127,8 @@ const updateUserForPay = async (
   timePay,
   amount,
   payment_system,
-  card_type
+  card_type,
+  dateEnd
 ) => {
   try {
     connectDb();
@@ -147,7 +148,7 @@ const updateUserForPay = async (
               phone: phone,
               order_status: status,
               datePay: timePay,
-              dateEnd: dateSubs().dateEndOne,
+              dateEnd: dateEnd,
               amount: amount,
               payment_system: payment_system,
               card_type: card_type,

@@ -125,12 +125,7 @@ const server = (bot) => {
       console.log(user);
       console.log(jsonData.orderReference);
       console.log("====================================");
-      // await sendInviteToUser(user[0].user_id, text.successPayment, true);
 
-      // sendMessageToUser("382298066", text.successPayment, true);
-
-      // const userId = "527139022"; // ID користувача, якому потрібно відправити посилання
-      // const userId = "382298066"; // ID користувача, якому потрібно відправити посилання
       if (jsonData.transactionStatus === "Approved") {
         await updateUserForPay(
           jsonData.email,
@@ -140,7 +135,8 @@ const server = (bot) => {
           timeEditPay(jsonData.createdDate),
           jsonData.amount,
           jsonData.paymentSystem,
-          jsonData.cardType
+          jsonData.cardType,
+          user[0].month === 1 ? dateSubs().dateEndOne : dateSubs().dateEndTwo
         );
 
         res.status(200).send({
@@ -163,6 +159,7 @@ const server = (bot) => {
           jsonData.transactionStatus.toLowerCase(),
           null,
           timeEditPay(jsonData.createdDate),
+          null,
           null,
           null,
           null

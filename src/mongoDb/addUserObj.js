@@ -10,6 +10,7 @@ const userInfo = {
   order_desc: null,
   deleteDate: null,
   addDate: null,
+  month: null,
   payment: {
     phone: null,
     amount: null,
