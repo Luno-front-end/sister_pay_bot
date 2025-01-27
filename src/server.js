@@ -2,7 +2,7 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const { generateSignatureRes } = require("./payment/sha");
-const { text } = require("./constantsUA");
+const { text, btnText } = require("./constantsUA");
 const { dateSubs } = require("./helper");
 // const TelegramBot = require("node-telegram-bot-api");
 
@@ -20,11 +20,7 @@ const app = express();
 require("dotenv").config();
 
 const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
-// app.use(express.json());
 app.use(bodyParser.text({ type: "*/*" }));
-
-// const token = process.env.BOT_TOKEN;
-// const bot = new TelegramBot(token, { polling: true });
 
 const server = (bot) => {
   const hbs = exphbs.create({
@@ -42,13 +38,12 @@ const server = (bot) => {
   app.use(express.static(__dirname + "/views/public"));
 
   const channelId = process.env.CHANNEL_ID;
-  // const channelId = "-1002465535663";
 
   const createInviteLink = async (chatId, expireDate, memberLimit) => {
     try {
       const inviteLink = await bot.createChatInviteLink(chatId, {
-        expire_date: expireDate, // Таймер на закінчення посилання
-        member_limit: memberLimit, // Ліміт використань (наприклад, 1)
+        expire_date: expireDate,
+        member_limit: memberLimit,
       });
       return inviteLink.invite_link;
     } catch (error) {
@@ -56,38 +51,45 @@ const server = (bot) => {
       throw error;
     }
   };
-  // console.log("====================================");
-  // console.log(process.env.LIVE_LINK_CHANNEL);
-  // console.log("====================================");
-  // Відправка користувачу повідомлення з унікальним посиланням
-  const sendInviteToUser = async (userId, message, statusPay) => {
+  const sendInviteToUser = async (userId, message, statusPay, link_pay) => {
+    const expireDate = Math.floor(Date.now() / 1000) + 900; // Лінк активний 15 хвилин
+    const memberLimit = 1;
+    const inviteLink = await createInviteLink(
+      channelId,
+      expireDate,
+      memberLimit
+    );
+
     try {
-      // Генерація інвайт-посилання (діє 1 година, ліміт 1 використання)
-      const expireDate = Math.floor(Date.now() / 1000) + 900; // Через 15 хв
-      // const expireDate = Math.floor(Date.now() / 1000) + 3600; // Через 1 годину
-      const memberLimit = 1;
-
-      const inviteLink = await createInviteLink(
-        channelId,
-        expireDate,
-        memberLimit
-      );
-
       if (statusPay) {
         await bot.sendMessage(userId, message, {
           reply_markup: {
             inline_keyboard: [
               [
-                {
-                  text: "Перейти в канал", // Текст кнопки
-                  url: inviteLink, // Унікальне посилання
-                },
+                { text: "Правила!", callback_data: "regulations" },
+                { text: "Перейти в канал", url: inviteLink },
               ],
             ],
           },
         });
       } else {
-        await bot.sendMessage(userId, message);
+        await bot.sendMessage(userId, message, {
+          reply_markup: {
+            inline_keyboard: [[{ text: "Повторити оплату", url: link_pay }]],
+          },
+        });
+        // await bot.editMessageText(text.regulations, {
+        //   chat_id,
+        //   message_id,
+        //   reply_markup: {
+        //     inline_keyboard: [[{ text: message, callback_data: "back" }]],
+        //   },
+        // });
+        // await bot.editMessageText(userId, message, {
+        //   reply_markup: {
+        //     inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+        //   },
+        // });
       }
     } catch (error) {
       console.error(
@@ -97,22 +99,94 @@ const server = (bot) => {
     }
   };
 
+  bot.on("callback_query", async (query) => {
+    try {
+      const { data: nameBtn, id, message } = query;
+      const { chat, message_id } = message;
+      const chat_id = chat.id;
+
+      if (nameBtn === "regulations") {
+        await bot.editMessageText(text.regulations, {
+          chat_id,
+          message_id,
+          reply_markup: {
+            inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+          },
+        });
+      }
+
+      if (nameBtn === "back") {
+        await bot.answerCallbackQuery(id);
+        const expireDate = Math.floor(Date.now() / 1000) + 900;
+        const memberLimit = 1;
+        const inviteLink = await createInviteLink(
+          channelId,
+          expireDate,
+          memberLimit
+        );
+
+        await bot.editMessageText(text.successPayment, {
+          chat_id,
+          message_id,
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "Правила!", callback_data: "regulations" },
+                { text: "Перейти в канал", url: inviteLink },
+              ],
+            ],
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Помилка в обробці callback_query:", error);
+    }
+  });
+
+  bot.on("callback_query", async (query) => {
+    try {
+      const { data: nameBtn, id, message } = query;
+      const { chat, message_id } = message;
+      const chat_id = chat.id;
+
+      if (nameBtn === "regulations") {
+        await bot.editMessageText(text.regulations, {
+          chat_id,
+          message_id,
+          reply_markup: {
+            inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+          },
+        });
+      }
+
+      if (nameBtn === "back") {
+        await bot.answerCallbackQuery(id);
+        await bot.editMessageText(text.successPayment, {
+          chat_id,
+          message_id,
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "Правила!", callback_data: "regulations" },
+                { text: "Перейти в канал", url: inviteLink },
+              ],
+            ],
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Помилка в обробці callback_query:", error);
+    }
+  });
+
   app.get("/users", async (req, res) => {
     const allUsers = await getAllUsers();
     res.render(__dirname + "/views/index", {
       allUsers: allUsers,
     });
   });
-  app.all("/good", async (req, res) => {
-    const response = await req.body;
 
-    res.redirect(process.env.URL_GROOP_CONNECT);
-    // res.status(200).send("HTTP 200 OK");
-
-    res.end();
-  });
-
-  app.post("/statusPay", async (req, res) => {
+  app.get("/statusPay", async (req, res) => {
     try {
       const rawData = req.body;
       const jsonData =
@@ -124,7 +198,7 @@ const server = (bot) => {
 
       console.log("====================================");
       console.log(user);
-      console.log(jsonData.orderReference);
+      console.log(jsonData);
       console.log("====================================");
 
       if (jsonData.transactionStatus === "Approved") {
@@ -152,7 +226,8 @@ const server = (bot) => {
         });
         res.end();
         user.length > 0 &&
-          (await sendInviteToUser(user[0].user_id, text.successPayment, true));
+          (await sendInviteToUser("382298066", text.successPayment, true));
+        await sendInviteToUser(user[0].user_id, text.successPayment, true);
       } else {
         await updateUserForPay(
           null,
@@ -177,11 +252,21 @@ const server = (bot) => {
           }),
         });
         res.end();
+        //   user.length > 0 &&
+        //  await sendInviteToUser(
+        //    user[0].user_id,
+        //    `Оплату відхилено, статус оплати "${jsonData.transactionStatus}".
+        //   Повторіть оплату натиснувши кнопку нижче.`,
+        //    false,
+        //    "https://google.com"
+        //  );
         user.length > 0 &&
           (await sendInviteToUser(
-            user[0].user_id,
-            `Оплату відхилено, статус оплати ${jsonData.transactionStatus}`,
-            false
+            "382298066",
+            `Оплату відхилено, статус оплати Скасовано.
+Повторіть оплату натиснувши кнопку нижче.`,
+            false,
+            "https://google.com"
           ));
       }
     } catch (err) {
