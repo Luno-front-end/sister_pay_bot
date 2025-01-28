@@ -34,7 +34,7 @@ bot.onText(/\/start/, async (msg) => {
       'Вітаємо у боті! Виберіть "Старт", щоб продовжити:',
       {
         reply_markup: {
-          keyboard: [["Старт"]],
+          keyboard: [["Старт або розпочати заново"]],
           resize_keyboard: true,
           one_time_keyboard: true, // Приховує клавіатуру після натискання
         },
@@ -211,14 +211,8 @@ bot.on("callback_query", async (query) => {
 bot.on("message", async (msg) => {
   try {
     const chat_id = msg.chat.id;
-    if (msg.text === "Старт") {
-      bot.sendMessage(chat_id, text.caption, {
-        reply_markup: {
-          keyboard: [["Старт"]],
-          resize_keyboard: true,
-          one_time_keyboard: true,
-        },
-      });
+    if (msg.text === "Старт або розпочати заново") {
+      bot.sendMessage(chat_id, text.caption);
       await bot.sendMessage(chat_id, text.caption_two, {
         ...keyboardDefault,
       });
