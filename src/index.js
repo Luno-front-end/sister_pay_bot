@@ -29,13 +29,17 @@ bot.onText(/\/start/, async (msg) => {
   try {
     const chat_id = msg.chat.id;
 
-    bot.sendMessage(chat_id, "Старт або розпочати заново", {
-      reply_markup: {
-        keyboard: [["Старт або розпочати заново"]],
-        resize_keyboard: true,
-        one_time_keyboard: true, // Приховує клавіатуру після натискання
-      },
-    });
+    bot.sendMessage(
+      chat_id,
+      "👋 Привіт! Натисни кнопку «СТАРТ», щоб продовжити👇",
+      {
+        reply_markup: {
+          keyboard: [["Старт або розпочати заново"]],
+          resize_keyboard: true,
+          one_time_keyboard: true, // Приховує клавіатуру після натискання
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
   }
