@@ -143,41 +143,41 @@ const server = (bot) => {
     }
   });
 
-  bot.on("callback_query", async (query) => {
-    try {
-      const { data: nameBtn, id, message } = query;
-      const { chat, message_id } = message;
-      const chat_id = chat.id;
+  // bot.on("callback_query", async (query) => {
+  //   try {
+  //     const { data: nameBtn, id, message } = query;
+  //     const { chat, message_id } = message;
+  //     const chat_id = chat.id;
 
-      if (nameBtn === "regulations") {
-        await bot.editMessageText(text.regulations, {
-          chat_id,
-          message_id,
-          reply_markup: {
-            inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
-          },
-        });
-      }
+  //     if (nameBtn === "regulations") {
+  //       await bot.editMessageText(text.regulations, {
+  //         chat_id,
+  //         message_id,
+  //         reply_markup: {
+  //           inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+  //         },
+  //       });
+  //     }
 
-      if (nameBtn === "back") {
-        await bot.answerCallbackQuery(id);
-        await bot.editMessageText(text.successPayment, {
-          chat_id,
-          message_id,
-          reply_markup: {
-            inline_keyboard: [
-              [
-                { text: "Правила!", callback_data: "regulations" },
-                { text: "Перейти в канал", url: inviteLink },
-              ],
-            ],
-          },
-        });
-      }
-    } catch (error) {
-      console.error("Помилка в обробці callback_query:", error);
-    }
-  });
+  //     if (nameBtn === "back") {
+  //       await bot.answerCallbackQuery(id);
+  //       await bot.editMessageText(text.successPayment, {
+  //         chat_id,
+  //         message_id,
+  //         reply_markup: {
+  //           inline_keyboard: [
+  //             [
+  //               { text: "Правила!", callback_data: "regulations" },
+  //               { text: "Перейти в канал", url: inviteLink },
+  //             ],
+  //           ],
+  //         },
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Помилка в обробці callback_query:", error);
+  //   }
+  // });
 
   app.get("/users", async (req, res) => {
     const allUsers = await getAllUsers();
