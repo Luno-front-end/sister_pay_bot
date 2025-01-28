@@ -19,7 +19,7 @@ const app = express();
 
 require("dotenv").config();
 
-const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
+// const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
 app.use(bodyParser.text({ type: "*/*" }));
 
 const server = (bot) => {
@@ -76,7 +76,14 @@ const server = (bot) => {
         await bot.sendMessage(userId, message, {
           reply_markup: {
             inline_keyboard: [
-              [{ text: "Повторити оплату", web_app: link_pay }],
+              [
+                {
+                  text: "Повторити оплату",
+                  web_app: {
+                    url: `${link_pay}`,
+                  },
+                },
+              ],
             ],
           },
         });
@@ -263,7 +270,7 @@ const server = (bot) => {
             `Оплату відхилено, статус оплати Скасовано.
 Повторіть оплату натиснувши кнопку нижче.`,
             false,
-            jsonData.repayUrl
+            jsonData?.repayUrl
           ));
       }
     } catch (err) {
