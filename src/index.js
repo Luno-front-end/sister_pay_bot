@@ -157,9 +157,9 @@ bot.on("callback_query", async (query) => {
 
         createUser();
       } else {
-        console.log("================user====================");
-        console.log(user);
-        console.log("====================================");
+        // console.log("================user====================");
+        // console.log(user);
+        // console.log("====================================");
         // if (user.payment === null) {
         updateUser(
           userId,

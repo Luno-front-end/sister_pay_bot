@@ -186,7 +186,7 @@ const server = (bot) => {
     });
   });
 
-  app.get("/statusPay", async (req, res) => {
+  app.post("/statusPay", async (req, res) => {
     try {
       const rawData = req.body;
       const jsonData =
@@ -195,11 +195,6 @@ const server = (bot) => {
       console.log("Received raw data:", jsonData);
 
       const user = await getOneUsersByPayId(jsonData.orderReference);
-
-      console.log("====================================");
-      console.log(user);
-      console.log(jsonData);
-      console.log("====================================");
 
       if (jsonData.transactionStatus === "Approved") {
         await updateUserForPay(
