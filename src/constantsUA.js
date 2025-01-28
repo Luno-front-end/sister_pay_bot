@@ -86,8 +86,8 @@ const text = {
 До зустрічі в каналі❤️`,
 
   choiceTariff: `Будь ласка, обери свій тариф:`,
-  selectedTariffMonth: `Натисність кнопку нижче для оплати підписки на місяць`,
-  selectedTariffThreeMonth: `Натисність кнопку нижче для оплати підписки на 3 місяці`,
+  selectedTariffMonth: `Натисни кнопку нижче для оплати підписки на місяць:`,
+  selectedTariffThreeMonth: `Натисни кнопку нижче для оплати підписки на 3 місяці:`,
 };
 
 const btnText = {
