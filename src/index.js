@@ -1,67 +1,22 @@
 const TelegramBot = require("node-telegram-bot-api");
 const { v1: uuidv1, v4: uuidv4 } = require("uuid");
 
-const { text, btnText, paymentTitle } = require("./constantsUA");
+const { text } = require("./constantsUA");
+
+const { requestData, paymentInfo } = require("./payment/dataReq");
 
 const {
-  requestData,
-  paymentInfo,
-  paymentInfoMonth,
-  paymentInfoThreeMonth,
-  recurringData,
-} = require("./payment/dataReq");
-const {
   keyboardDefault,
-  keyboardDefaultReplay,
-  keyboardGeneral,
-  subscription,
   pay_btn_month,
   pay_btn_three_month,
-  pay_btns,
-  cancelPayment,
-  btnIsPayment,
-  cancelSecurityPayment,
   buyBtn,
   keyboardTariff,
 } = require("./components/buttons");
-const {
-  keyboardDefaultRu,
-  buyBtnRu,
-  keyboardDefaultReplayRu,
-  keyboardGeneralRu,
-  subscriptionRu,
-  pay_btnRu,
-  btnIsPaymentRu,
-  cancelPaymentRu,
-  cancelSecurityPaymentRu,
-} = require("./components/buttonsRu");
-const {
-  createUser,
-  updateSecureOrderUser,
-  updateUser,
-  getOneUserById,
-  getAllUsers,
-  deletePayUser,
-  recurringPayResponseDB,
-  updateUserLang,
-} = require("./mongoDb/index");
-const {
-  reqWFPMonth,
-  reqWFPThreeMonth,
-  recurringPay,
-} = require("./payment/paymentsWFP");
-const {
-  addInfoUserDB,
-  priceConverter,
-  timePay,
-  acceptedMySubscription,
-  recurringPayHelp,
-} = require("./helper");
-const {
-  generateSignature,
-  createShaRes,
-  createShaRecurring,
-} = require("./payment/sha");
+
+const { createUser, updateUser, getOneUserById } = require("./mongoDb/index");
+const { reqWFPMonth } = require("./payment/paymentsWFP");
+const { addInfoUserDB } = require("./helper");
+const { generateSignature } = require("./payment/sha");
 const server = require("./server");
 
 require("dotenv").config();
@@ -74,10 +29,17 @@ bot.onText(/\/start/, async (msg) => {
   try {
     const chat_id = msg.chat.id;
 
-    await bot.sendMessage(chat_id, text.caption);
-    await bot.sendMessage(chat_id, text.caption_two, {
-      ...keyboardDefault,
-    });
+    bot.sendMessage(
+      chat_id,
+      'Вітаємо у боті! Виберіть "Старт", щоб продовжити:',
+      {
+        reply_markup: {
+          keyboard: [["Старт"]],
+          resize_keyboard: true,
+          one_time_keyboard: true, // Приховує клавіатуру після натискання
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
   }
@@ -89,6 +51,9 @@ bot.on("callback_query", async (query) => {
     const id = query.id;
     const chat_id = query.message.chat.id;
     const message_id = query.message.message_id;
+    console.log("====================================");
+    console.log(query);
+    console.log("====================================");
 
     const userId = query.from.id;
     const userFirstName = query.from.first_name;
@@ -157,17 +122,12 @@ bot.on("callback_query", async (query) => {
 
         createUser();
       } else {
-        // console.log("================user====================");
-        // console.log(user);
-        // console.log("====================================");
-        // if (user.payment === null) {
         updateUser(
           userId,
           requestData.amount,
           requestData.orderReference,
           requestData.productName[0]
         );
-        // }
       }
 
       bot.editMessageText(text.selectedTariffMonth, {
@@ -235,12 +195,32 @@ bot.on("callback_query", async (query) => {
       });
     }
 
-    if (nameBtn === "back") {
+    if (nameBtn === "back_index") {
       await bot.answerCallbackQuery(id);
       bot.editMessageText(text.choiceTariff, {
         chat_id,
         message_id: message_id,
         ...keyboardTariff,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+});
+
+bot.on("message", async (msg) => {
+  try {
+    const chat_id = msg.chat.id;
+    if (msg.text === "Старт") {
+      bot.sendMessage(chat_id, text.caption, {
+        reply_markup: {
+          keyboard: [["Старт"]],
+          resize_keyboard: true,
+          one_time_keyboard: true,
+        },
+      });
+      await bot.sendMessage(chat_id, text.caption_two, {
+        ...keyboardDefault,
       });
     }
   } catch (error) {

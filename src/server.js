@@ -87,18 +87,6 @@ const server = (bot) => {
             ],
           },
         });
-        // await bot.editMessageText(text.regulations, {
-        //   chat_id,
-        //   message_id,
-        //   reply_markup: {
-        //     inline_keyboard: [[{ text: message, callback_data: "back" }]],
-        //   },
-        // });
-        // await bot.editMessageText(userId, message, {
-        //   reply_markup: {
-        //     inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
-        //   },
-        // });
       }
     } catch (error) {
       console.error(
@@ -119,12 +107,14 @@ const server = (bot) => {
           chat_id,
           message_id,
           reply_markup: {
-            inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
+            inline_keyboard: [
+              [{ text: btnText.back, callback_data: "back_server" }],
+            ],
           },
         });
       }
 
-      if (nameBtn === "back") {
+      if (nameBtn === "back_server") {
         await bot.answerCallbackQuery(id);
         const expireDate = Math.floor(Date.now() / 1000) + 900;
         const memberLimit = 1;
@@ -151,42 +141,6 @@ const server = (bot) => {
       console.error("Помилка в обробці callback_query:", error);
     }
   });
-
-  // bot.on("callback_query", async (query) => {
-  //   try {
-  //     const { data: nameBtn, id, message } = query;
-  //     const { chat, message_id } = message;
-  //     const chat_id = chat.id;
-
-  //     if (nameBtn === "regulations") {
-  //       await bot.editMessageText(text.regulations, {
-  //         chat_id,
-  //         message_id,
-  //         reply_markup: {
-  //           inline_keyboard: [[{ text: btnText.back, callback_data: "back" }]],
-  //         },
-  //       });
-  //     }
-
-  //     if (nameBtn === "back") {
-  //       await bot.answerCallbackQuery(id);
-  //       await bot.editMessageText(text.successPayment, {
-  //         chat_id,
-  //         message_id,
-  //         reply_markup: {
-  //           inline_keyboard: [
-  //             [
-  //               { text: "Правила!", callback_data: "regulations" },
-  //               { text: "Перейти в канал", url: inviteLink },
-  //             ],
-  //           ],
-  //         },
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Помилка в обробці callback_query:", error);
-  //   }
-  // });
 
   app.get("/users", async (req, res) => {
     const allUsers = await getAllUsers();
@@ -230,8 +184,7 @@ const server = (bot) => {
         });
         res.end();
         user.length > 0 &&
-          (await sendInviteToUser("382298066", text.successPayment, true));
-        await sendInviteToUser(user[0].user_id, text.successPayment, true);
+          (await sendInviteToUser(user[0].user_id, text.successPayment, true));
       } else {
         await updateUserForPay(
           null,

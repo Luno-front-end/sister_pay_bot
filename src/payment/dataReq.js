@@ -16,32 +16,25 @@ const requestData = {
   serviceUrl: process.env.CALL_BACK_URL,
 };
 
-const recurringData = {
-  request: {
-    order_id: String,
-    order_desc: String,
-    currency: "USD",
-    amount: Number,
-    rectoken: String,
-    signature: String,
-    // merchant_id: process.env.MERCHANT_ID,
-  },
-};
+// const recurringData = {
+//   request: {
+//     order_id: String,
+//     order_desc: String,
+//     currency: "USD",
+//     amount: Number,
+//     rectoken: String,
+//     signature: String,
+//     // merchant_id: process.env.MERCHANT_ID,
+//   },
+// };
 
-const resData = {
-  transactionType: "CHECK_STATUS",
-  order_id: "",
-  merchant_id: process.env.MERCHANT_ID,
-  signature: "",
-  apiVersion: "1",
-};
-
-const paymentInfoMonth = {
-  pay_link: "",
-};
-const paymentInfoThreeMonth = {
-  pay_link: "",
-};
+// const resData = {
+//   transactionType: "CHECK_STATUS",
+//   order_id: "",
+//   merchant_id: process.env.MERCHANT_ID,
+//   signature: "",
+//   apiVersion: "1",
+// };
 
 const paymentInfo = {
   pay_link: "",
@@ -50,9 +43,6 @@ const paymentInfo = {
 module.exports = {
   requestData,
   paymentInfo,
-
-  resData,
-  paymentInfoMonth,
-  paymentInfoThreeMonth,
-  recurringData,
+  // resData,
+  // recurringData,
 };
