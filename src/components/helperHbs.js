@@ -10,7 +10,6 @@ const getStatus = (status) => {
   } else if (status === "deleted") {
     return "Відписався";
   }
-  і;
 };
 
 const getColorStatus = (status) => {

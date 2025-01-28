@@ -51,9 +51,6 @@ bot.on("callback_query", async (query) => {
     const id = query.id;
     const chat_id = query.message.chat.id;
     const message_id = query.message.message_id;
-    console.log("====================================");
-    console.log(query);
-    console.log("====================================");
 
     const userId = query.from.id;
     const userFirstName = query.from.first_name;

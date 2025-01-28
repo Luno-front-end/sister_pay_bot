@@ -154,8 +154,6 @@ const server = (bot) => {
       const jsonData =
         typeof rawData === "string" ? JSON.parse(rawData) : rawData;
 
-      console.log("Received raw data:", jsonData);
-
       const user = await getOneUsersByPayId(jsonData.orderReference);
 
       if (jsonData.transactionStatus === "Approved") {
