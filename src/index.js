@@ -36,7 +36,7 @@ bot.onText(/\/start/, async (msg) => {
         reply_markup: {
           keyboard: [["Старт або розпочати заново"]],
           resize_keyboard: true,
-          one_time_keyboard: true, // Приховує клавіатуру після натискання
+          // one_time_keyboard: true, // Приховує клавіатуру після натискання
         },
       }
     );
