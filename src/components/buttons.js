@@ -31,16 +31,10 @@ const keyboardTariff = {
         {
           text: btnText.month,
           callback_data: "month",
-          // web_app: {
-          //   url: `${paymentInfoMonth.pay_link}`,
-          // },
         },
         {
           text: btnText.threeMonth,
           callback_data: "three_month",
-          // web_app: {
-          //   url: `${paymentInfoThreeMonth.pay_link}`,
-          // },
         },
       ],
     ],

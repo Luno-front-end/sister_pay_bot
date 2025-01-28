@@ -75,7 +75,9 @@ const server = (bot) => {
       } else {
         await bot.sendMessage(userId, message, {
           reply_markup: {
-            inline_keyboard: [[{ text: "Повторити оплату", url: link_pay }]],
+            inline_keyboard: [
+              [{ text: "Повторити оплату", web_app: link_pay }],
+            ],
           },
         });
         // await bot.editMessageText(text.regulations, {
@@ -261,7 +263,7 @@ const server = (bot) => {
             `Оплату відхилено, статус оплати Скасовано.
 Повторіть оплату натиснувши кнопку нижче.`,
             false,
-            "https://google.com"
+            jsonData.repayUrl
           ));
       }
     } catch (err) {
