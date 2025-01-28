@@ -31,7 +31,7 @@ bot.onText(/\/start/, async (msg) => {
 
     bot.sendMessage(
       chat_id,
-      'Вітаємо у боті! Виберіть "Старт", щоб продовжити:',
+      "👋 Привіт! Натисни кнопку «СТАРТ», щоб продовжити👇",
       {
         reply_markup: {
           keyboard: [["Старт або розпочати заново"]],
@@ -211,7 +211,7 @@ bot.on("callback_query", async (query) => {
 bot.on("message", async (msg) => {
   try {
     const chat_id = msg.chat.id;
-    if (msg.text === "Старт або розпочати заново") {
+    if (msg.text === "👋 Привіт! Натисни кнопку «СТАРТ», щоб продовжити👇") {
       bot.sendMessage(chat_id, text.caption);
       await bot.sendMessage(chat_id, text.caption_two, {
         ...keyboardDefault,
