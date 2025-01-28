@@ -83,9 +83,9 @@ bot.on("callback_query", async (query) => {
       const orderIdGenerate = uuidv4();
 
       requestData.orderReference = orderIdGenerate;
-      requestData.amount = 2;
+      requestData.amount = 1290;
       requestData.productName = ["Підписка на місяць"];
-      requestData.productPrice = [2];
+      requestData.productPrice = [1290];
       requestData.orderDate = time;
       requestData.month = 1;
 
@@ -140,11 +140,9 @@ bot.on("callback_query", async (query) => {
       const orderIdGenerate = uuidv4();
 
       requestData.orderReference = orderIdGenerate;
-      requestData.amount = 3;
-      // requestData.amount = 3500;
+      requestData.amount = 3500;
       requestData.productName = ["Підписка на 3 місяці"];
-      requestData.productPrice = [3];
-      // requestData.productPrice = [3500];
+      requestData.productPrice = [3500];
       requestData.orderDate = time;
       requestData.month = 3;
 
