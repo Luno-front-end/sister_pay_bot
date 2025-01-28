@@ -29,17 +29,13 @@ bot.onText(/\/start/, async (msg) => {
   try {
     const chat_id = msg.chat.id;
 
-    bot.sendMessage(
-      chat_id,
-      "👋 Привіт! Натисни кнопку «СТАРТ», щоб продовжити👇",
-      {
-        reply_markup: {
-          keyboard: [["Старт або розпочати заново"]],
-          resize_keyboard: true,
-          one_time_keyboard: true, // Приховує клавіатуру після натискання
-        },
-      }
-    );
+    bot.sendMessage(chat_id, "Старт або розпочати заново", {
+      reply_markup: {
+        keyboard: [["Старт або розпочати заново"]],
+        resize_keyboard: true,
+        one_time_keyboard: true, // Приховує клавіатуру після натискання
+      },
+    });
   } catch (error) {
     console.error(error);
   }
@@ -211,7 +207,7 @@ bot.on("callback_query", async (query) => {
 bot.on("message", async (msg) => {
   try {
     const chat_id = msg.chat.id;
-    if (msg.text === "👋 Привіт! Натисни кнопку «СТАРТ», щоб продовжити👇") {
+    if (msg.text === "Старт або розпочати заново") {
       bot.sendMessage(chat_id, text.caption);
       await bot.sendMessage(chat_id, text.caption_two, {
         ...keyboardDefault,
