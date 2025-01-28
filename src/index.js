@@ -207,7 +207,7 @@ bot.on("message", async (msg) => {
   try {
     const chat_id = msg.chat.id;
     if (msg.text === "Старт або розпочати заново") {
-      bot.sendMessage(chat_id, text.caption);
+      await bot.sendMessage(chat_id, text.caption);
       await bot.sendMessage(chat_id, text.caption_two, {
         ...keyboardDefault,
       });
