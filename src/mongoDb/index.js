@@ -170,33 +170,33 @@ const updateUserForPay = async (
     console.log(error);
   }
 };
-const updateUserStatusPay = async (pay_id, status, system, card) => {
-  try {
-    connectDb();
-    const user = await getOneUsersByPayId(pay_id);
-    pay_id === user[0].payment_id
-      ? SubsUsersSchema.updateOne(
-          { payment_id: pay_id },
-          {
-            $set: {
-              "payment.order_status": status,
-              "payment.payment_system": system,
-              "payment.card_type": card,
-            },
-          },
-          (err, result) => {
-            if (err) {
-              console.log("Unable update user: ", err);
-            }
-          }
-        )
-      : console.log("Щось пішло не так");
+// const updateUserStatusPay = async (pay_id, status, system, card) => {
+//   try {
+//     connectDb();
+//     const user = await getOneUsersByPayId(pay_id);
+//     pay_id === user[0].payment_id
+//       ? SubsUsersSchema.updateOne(
+//           { payment_id: pay_id },
+//           {
+//             $set: {
+//               "payment.order_status": status,
+//               "payment.payment_system": system,
+//               "payment.card_type": card,
+//             },
+//           },
+//           (err, result) => {
+//             if (err) {
+//               console.log("Unable update user: ", err);
+//             }
+//           }
+//         )
+//       : console.log("Щось пішло не так");
 
-    connectDb().on("error", console.log).on("disconnect", connectDb);
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     connectDb().on("error", console.log).on("disconnect", connectDb);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 const getAllUsers = async () => {
   connectDb();
@@ -297,7 +297,7 @@ module.exports = {
   updateUserForPay,
   deletePayUser,
   recurringPayResponseDB,
-  updateUserStatusPay,
+  // updateUserStatusPay,
   updateUserLang,
   getOneUsersByPayId,
   updateSecureOrderUser,

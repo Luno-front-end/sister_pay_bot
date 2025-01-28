@@ -188,7 +188,7 @@ bot.on("callback_query", async (query) => {
 
       paymentInfo.pay_link = paymentInfoRes.invoiceUrl;
 
-      bot.editMessageText(text.selectedTariffMonth, {
+      bot.editMessageText(text.selectedTariffThreeMonth, {
         chat_id,
         message_id: message_id,
         ...pay_btn_three_month(),

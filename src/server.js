@@ -9,7 +9,6 @@ const { dateSubs } = require("./helper");
 const {
   updateUserForPay,
   getAllUsers,
-  updateUserStatusPay,
   getOneUsersByPayId,
 } = require("./mongoDb/index");
 const { timeEditPay } = require("./helper");
@@ -209,17 +208,10 @@ const server = (bot) => {
           }),
         });
         res.end();
-        //   user.length > 0 &&
-        //  await sendInviteToUser(
-        //    user[0].user_id,
-        //    `Оплату відхилено, статус оплати "${jsonData.transactionStatus}".
-        //   Повторіть оплату натиснувши кнопку нижче.`,
-        //    false,
-        //    "https://google.com"
-        //  );
+
         user.length > 0 &&
           (await sendInviteToUser(
-            "382298066",
+            user[0].user_id,
             `Оплату відхилено, статус оплати Скасовано.
 Повторіть оплату натиснувши кнопку нижче.`,
             false,
