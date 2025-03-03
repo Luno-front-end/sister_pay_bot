@@ -1,5 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
 const { v1: uuidv1, v4: uuidv4 } = require("uuid");
+const cron = require("node-cron");
 
 const { text } = require("./constantsUA");
 
@@ -13,7 +14,12 @@ const {
   keyboardTariff,
 } = require("./components/buttons");
 
-const { createUser, updateUser, getOneUserById } = require("./mongoDb/index");
+const {
+  createUser,
+  updateUser,
+  getOneUserById,
+  findUserByDate,
+} = require("./mongoDb/index");
 const { reqWFPMonth } = require("./payment/paymentsWFP");
 const { addInfoUserDB } = require("./helper");
 const { generateSignature } = require("./payment/sha");
@@ -215,4 +221,27 @@ bot.on("message", async (msg) => {
   } catch (error) {
     console.error(error);
   }
+});
+
+const checkPayments = async () => {
+  const users = await findUserByDate();
+
+  for (const user of users) {
+    try {
+      await bot.sendMessage(user.user_id, text.rePayText);
+
+      await bot.sendMessage(user.user_id, text.caption_two, {
+        ...keyboardDefault,
+      });
+    } catch (error) {
+      console.error(
+        `Помилка при відправці повідомлення ${user.telegramId}`,
+        error
+      );
+    }
+  }
+};
+
+cron.schedule("0 9 * * *", () => {
+  checkPayments();
 });

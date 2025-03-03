@@ -289,6 +289,35 @@ const updateUserLang = (userTgId, lang) => {
     console.log(error);
   }
 };
+
+const findUserByDate = async () => {
+  try {
+    connectDb();
+    const today = new Date()
+      .toLocaleDateString("uk-UA", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .replace(/\./g, "/")
+      .trim();
+    console.log("====================================");
+    console.log(today);
+    console.log("====================================");
+    return SubsUsersSchema.find({
+      "payment.dateEnd": today,
+    });
+
+    //  return SubsUsersSchema.find({
+    //   $expr: { $eq: ["$dateEnd", today] },
+    //   isNotified: false,
+    // });
+
+    // connectDb().on("error", console.log).on("disconnect", connectDb);
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   createUser,
   updateUser,
@@ -302,4 +331,5 @@ module.exports = {
   getOneUsersByPayId,
   updateSecureOrderUser,
   updateUserPayInfo,
+  findUserByDate,
 };
