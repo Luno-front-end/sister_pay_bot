@@ -87,7 +87,7 @@ const updateSecureOrderUser = (userId, signature, order_id, date) => {
   connectDb().on("error", console.log).on("disconnect", connectDb);
 };
 
-const updateUser = (userId, pay, order_id, productName) => {
+const updateUser = (userId, pay, order_id, productName, month) => {
   connectDb();
   SubsUsersSchema.updateOne(
     { user_id: userId },
@@ -96,6 +96,7 @@ const updateUser = (userId, pay, order_id, productName) => {
         pay: pay,
         order_id,
         order_desc: productName,
+        month,
       },
     },
     (err, result) => {
@@ -106,11 +107,6 @@ const updateUser = (userId, pay, order_id, productName) => {
   );
   connectDb().on("error", console.log).on("disconnect", connectDb);
 };
-
-//   order_id: "",
-//   order_status: "",
-//   rectoken: "",
-//   order_status: "",
 
 const getUserForOrderId = async (order_id, secure) => {
   connectDb();

@@ -10,16 +10,17 @@ const dateSubs = () => {
   const oneM = moment().add(1, "month").calendar();
   const threeM = moment().add(3, "month").calendar();
 
-  const monthSix = threeM.slice(0, 2);
-  const dateSix = threeM.slice(3, 5);
-  const yearhSix = threeM.slice(6, 10);
+  const monthThree = threeM.slice(0, 2);
+  const dateThree = threeM.slice(3, 5);
+  const yearhThree = threeM.slice(6, 10);
 
   const monthOne = oneM.slice(0, 2);
   const dateOne = oneM.slice(3, 5);
   const yearhOne = oneM.slice(6, 10);
+
   const date = {
     dateEndOne: `${dateOne}/${monthOne}/${yearhOne}`,
-    dateEndTwo: `${dateSix}/${monthSix}/${yearhSix}`,
+    dateEndTwo: `${dateThree}/${monthThree}/${yearhThree}`,
   };
   return date;
 };
@@ -36,7 +37,8 @@ const addInfoUserDB = (
   userName,
   order_desc,
   amount,
-  order_id
+  order_id,
+  month
 ) => {
   userInfo.first_name = firstName;
   userInfo.last_name = lastName;
@@ -47,6 +49,7 @@ const addInfoUserDB = (
   userInfo.order_id = order_id;
   userInfo.old_pay = amount;
   userInfo.old_order_id = order_id;
+  userInfo.month = month;
 };
 
 const paymentStatus = (mail, orderId, status, rectoken, amount) => {

@@ -120,7 +120,8 @@ bot.on("callback_query", async (query) => {
           username,
           requestData.productName[0],
           requestData.amount,
-          requestData.orderReference
+          requestData.orderReference,
+          1
         );
 
         createUser();
@@ -129,7 +130,8 @@ bot.on("callback_query", async (query) => {
           userId,
           requestData.amount,
           requestData.orderReference,
-          requestData.productName[0]
+          requestData.productName[0],
+          1
         );
       }
 
@@ -173,7 +175,8 @@ bot.on("callback_query", async (query) => {
           username,
           requestData.productName[0],
           requestData.amount,
-          requestData.orderReference
+          requestData.orderReference,
+          3
         );
         createUser();
       } else {
@@ -181,7 +184,8 @@ bot.on("callback_query", async (query) => {
           userId,
           requestData.amount,
           requestData.orderReference,
-          requestData.productName[0]
+          requestData.productName[0],
+          3
         );
       }
 
