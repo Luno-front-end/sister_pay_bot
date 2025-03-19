@@ -1,10 +1,6 @@
 const moment = require("moment");
 
 const userInfo = require("./mongoDb/addUserObj");
-const { recurringData } = require("./payment/dataReq");
-
-const { text, btnText } = require("./constantsUA");
-const { request } = require("express");
 
 const dateSubs = () => {
   const oneM = moment().add(1, "month").calendar();
@@ -12,22 +8,21 @@ const dateSubs = () => {
 
   const monthThree = threeM.slice(0, 2);
   const dateThree = threeM.slice(3, 5);
-  const yearhThree = threeM.slice(6, 10);
+  const yearThree = threeM.slice(6, 10);
 
   const monthOne = oneM.slice(0, 2);
   const dateOne = oneM.slice(3, 5);
-  const yearhOne = oneM.slice(6, 10);
+  const yearOne = oneM.slice(6, 10);
 
+  // const date = {
+  //   dateEndOne: `${dateOne}-${monthOne}-${yearhOne}`,
+  //   dateEndTwo: `${dateThree}-${monthThree}-${yearhThree}`,
+  // };
   const date = {
-    dateEndOne: `${dateOne}/${monthOne}/${yearhOne}`,
-    dateEndTwo: `${dateThree}/${monthThree}/${yearhThree}`,
+    dateEndOne: `${yearOne}-${monthOne}-${dateOne}`,
+    dateEndTwo: `${yearThree}-${monthThree}-${dateThree}`,
   };
   return date;
-};
-
-const priceConverter = (pay) => {
-  if (pay === 5000) return 50;
-  if (pay === 15000) return 150;
 };
 
 const addInfoUserDB = (
@@ -52,71 +47,16 @@ const addInfoUserDB = (
   userInfo.month = month;
 };
 
-const paymentStatus = (mail, orderId, status, rectoken, amount) => {
-  userInfo.payment.sender_email = mail;
-  userInfo.payment.order_id = orderId;
-  userInfo.payment.order_status = status;
-  userInfo.payment.rectoken = rectoken;
-  userInfo.payment.amount = amount;
-};
-
-const recurringPayHelp = (rectoken, order_id, order_desc, amount) => {
-  recurringData.request.rectoken = rectoken;
-  recurringData.request.order_desc = order_desc;
-  recurringData.request.amount = amount;
-  recurringData.request.order_id = order_id;
-};
-
-const timePay = () => {
-  const date = new Date();
-  const year = date.getFullYear();
-
-  const month = () => {
-    const month = date.getMonth() + 1;
-    if (month < 10) {
-      return `0${month}`;
-    }
-    return month;
-  };
-
-  const day = () => {
-    const day = date.getDate();
-
-    if (day < 10) {
-      return `0${day}`;
-    }
-
-    return day;
-  };
-
-  return `${day()}/${month()}/${year}`;
-};
-
 const timeEditPay = (res) => {
   const date = new Date(res * 1000);
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
-
-const acceptedMySubscription = (subsUser) => {
-  if (!subsUser[0]?.payment.order_id) {
-    return text.mySubscription;
-  } else {
-    return `⌛️ У вас підписка на ${subsUser[0].subscribe} місяц.
-Тип підписки: ${subsUser[0].pay === 50 ? btnText.days : btnText.vip}
-Підписалися: ${subsUser[0].payment.datePay} 
-Дата закінчення: ${subsUser[0].payment.dateEnd}`;
-  }
+  return `${year}-${month}-${day}`;
 };
 
 module.exports = {
   addInfoUserDB,
   dateSubs,
-  priceConverter,
-  timePay,
   timeEditPay,
-  acceptedMySubscription,
-  recurringPayHelp,
 };

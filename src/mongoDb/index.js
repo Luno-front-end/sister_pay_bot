@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const moment = require("moment");
 const SubsUsersSchema = require("./schemas");
 const userInfo = require("./addUserObj");
 const { dateSubs, timeEditPay } = require("../helper");
@@ -25,8 +25,6 @@ const connectDb = () => {
 
   return mongoose.connection;
 };
-
-// const subsUsersPost = mongoose.model("subsUsers", subsUsersSchema);
 
 const createUser = () => {
   connectDb();
@@ -166,33 +164,6 @@ const updateUserForPay = async (
     console.log(error);
   }
 };
-// const updateUserStatusPay = async (pay_id, status, system, card) => {
-//   try {
-//     connectDb();
-//     const user = await getOneUsersByPayId(pay_id);
-//     pay_id === user[0].payment_id
-//       ? SubsUsersSchema.updateOne(
-//           { payment_id: pay_id },
-//           {
-//             $set: {
-//               "payment.order_status": status,
-//               "payment.payment_system": system,
-//               "payment.card_type": card,
-//             },
-//           },
-//           (err, result) => {
-//             if (err) {
-//               console.log("Unable update user: ", err);
-//             }
-//           }
-//         )
-//       : console.log("Щось пішло не так");
-
-//     connectDb().on("error", console.log).on("disconnect", connectDb);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
 const getAllUsers = async () => {
   connectDb();
@@ -213,27 +184,6 @@ const getOneUserById = async (user_id) => {
   const user = await SubsUsersSchema.find({ user_id: user_id });
   connectDb().on("error", console.log).on("disconnect", connectDb);
   return user;
-};
-
-const deletePayUser = (userId) => {
-  connectDb();
-  SubsUsersSchema.updateOne(
-    { user_id: userId },
-    {
-      $set: {
-        "payment.order_id": null,
-        "payment.order_status": "deleted",
-        "payment.rectoken": null,
-        "payment.amount": null,
-      },
-    },
-    (err, result) => {
-      if (err) {
-        console.log("Unable update user: ", err);
-      }
-    }
-  );
-  connectDb().on("error", console.log).on("disconnect", connectDb);
 };
 
 const recurringPayResponseDB = (res, userId, errorMessage) => {
@@ -289,40 +239,27 @@ const updateUserLang = (userTgId, lang) => {
 const findUserByDate = async () => {
   try {
     connectDb();
-    const today = new Date()
-      .toLocaleDateString("uk-UA", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .replace(/\./g, "/")
-      .trim();
-    console.log("====================================");
-    console.log(today);
-    console.log("====================================");
+
+    // Отримуємо сьогоднішню дату у форматі "YYYY-MM-DD"
+    const today = moment().format("YYYY-MM-DD");
+
+    console.log("Сьогоднішня дата:", today);
+
     return SubsUsersSchema.find({
       "payment.dateEnd": today,
     });
-
-    //  return SubsUsersSchema.find({
-    //   $expr: { $eq: ["$dateEnd", today] },
-    //   isNotified: false,
-    // });
-
-    // connectDb().on("error", console.log).on("disconnect", connectDb);
   } catch (error) {
     console.log(error);
   }
 };
+
 module.exports = {
   createUser,
   updateUser,
   getAllUsers,
   getOneUserById,
   updateUserForPay,
-  deletePayUser,
   recurringPayResponseDB,
-  // updateUserStatusPay,
   updateUserLang,
   getOneUsersByPayId,
   updateSecureOrderUser,

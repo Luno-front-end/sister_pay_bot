@@ -18,7 +18,6 @@ const app = express();
 
 require("dotenv").config();
 
-// const channelInviteLink = process.env.CHANNEL_INVITE_LINK;
 app.use(bodyParser.text({ type: "*/*" }));
 
 const server = (bot) => {
@@ -156,7 +155,7 @@ const server = (bot) => {
 
       const user = await getOneUsersByPayId(jsonData.orderReference);
 
-      if (jsonData.transactionStatus === "Approved") {
+      if (jsonData.transactionStatus.toLowerCase() === "approved") {
         await updateUserForPay(
           jsonData.email,
           jsonData.orderReference,

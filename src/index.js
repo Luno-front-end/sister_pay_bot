@@ -65,6 +65,8 @@ bot.on("callback_query", async (query) => {
 
     const time = Math.floor(new Date().getTime() / 1000);
 
+    console.log(time);
+
     const user = await getOneUserById(userId);
 
     if (nameBtn === "buy_btn") {
@@ -229,6 +231,7 @@ bot.on("message", async (msg) => {
 
 const checkPayments = async () => {
   const users = await findUserByDate();
+  console.log(users);
 
   for (const user of users) {
     try {
@@ -246,6 +249,9 @@ const checkPayments = async () => {
   }
 };
 
+// setInterval(() => {
+//   checkPayments();
+// }, 5000);
 cron.schedule("0 9 * * *", () => {
   checkPayments();
 });
